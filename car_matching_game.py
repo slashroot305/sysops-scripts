@@ -3,12 +3,15 @@
 # Game -> Match the car with its model
 
 # print statements that creates a banner
-'''
-WELCOME! LETS BEGIN
-MATCH THE CAR MAKE & MODEL
-'''
-print("WELCOME! LETS BEGIN")
-
+print('########################################')
+print('#                                      #')
+print('#                                      #')
+print('#        WELCOME! LETS BEGIN           #')
+print('#      MATCH THE CAR MAKE & MODEL      #')
+print('#                                      #')
+print('#                                      #')
+print('########################################')
+print('')
 
 # array of cars, model, and year
 arr_cars = ["Genesis", "Audi", "BMW", "Cadilac", "Mercedes-AMG", "Acura"]
