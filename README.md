@@ -2,4 +2,6 @@
 This is the master github repo for all programs and scripts.
 
 Folders
--> 
+-> bash
+-> powershell
+-> python
