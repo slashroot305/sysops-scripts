@@ -7,8 +7,7 @@
 WELCOME! LETS BEGIN
 MATCH THE CAR MAKE & MODEL
 '''
-
-# test
+print("WELCOME! LETS BEGIN")
 
 
 # array of cars, model, and year
