@@ -1,16 +1,16 @@
 <#
-    scope: software removal validation
+    Scope: software removal validation
 
-    description: checks software installation
+    Description: checks software installation
     path(s) to vaildate if present or not
     and send information to logscale.
 
-    notes
-    version: 1.0
-    creator & maintainer: Jojo A
+    Notes
+    Version: 1.0
+    Creator & maintainer: Jojo A
 
-    creation date & time: 03/21/2024 23:00
-    date last modified: 11/03/2025 21:21
+    Creation date & time: 03/21/2024 23:00
+    Date last modified: 11/03/2025 21:21
 #>
 
 # a generic logging function

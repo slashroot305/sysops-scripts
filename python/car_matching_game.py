@@ -77,6 +77,7 @@ player_choice()
 
         #<--------------------------------------------------------------->#
 
+
         # match logic
         # if player_input1 == 0 and player_input2 == 1:
         #     print(f"{arr_cars[0]} {arr_models[1]}\n{good_match}")
@@ -96,5 +97,6 @@ player_choice()
         # elif player_input1 == 5 and player_input2 == 4:
         #     print(f"{arr_cars[5]} {arr_models[4]}\n{good_match}")
         #     print('')
+
 
         #<-------------------------------------------------------------->#
