@@ -8,10 +8,9 @@
     notes
     version: 1.0
     creator & maintainer: Jojo A
-    send-to-logscale code: Brett C
 
-    creation date & time: 03/21/2024 | 23:00:00
-    date last modified: 03/21/2024 | 23:00:00
+    creation date & time: 03/21/2024 23:00
+    date last modified: 11/03/2025 21:21
 #>
 
 # a generic logging function
@@ -36,8 +35,8 @@ function SendTo-Logscale() {
         [string]$Token
     )
 
-# insert url to orginization's logscale query page. This is an example for CAT
-$URL = "https://cat.ingest.logscale.us-2.crowdstrike.com/api/v1/ingest/hec/raw"
+# insert url to orginization's logscale query page. This is an example for ABC
+$URL = ""
 $Headers = @{ Authorization = 'Bearer', $Token -join ' '; ContentType = 'text/plain'}
 
     try {
