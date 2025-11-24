@@ -2,7 +2,7 @@
 
 import random, string, secrets, tempfile, subprocess, platform, os
 
-# generate secure random 16 char string
+# generate secure random 16 character string
 random_string = ''.join(
     secrets.choice(
         string.ascii_letters + string.digits)
