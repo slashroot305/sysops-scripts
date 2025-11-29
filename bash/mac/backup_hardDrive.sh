@@ -11,7 +11,7 @@
 #============================================#
 
 # set backup locations
-jovybz_main_drive="/Users/jovybz/Desktop/Backup_script_test_env/Folder_A/"
+jovybz_main_drive="/Users/jovybz/Desktop/Backup_script_test_env/Folder_A"
 backup_drive="/Users/jovybz/Desktop/Backup_script_test_env/Folder_B"
 new_copy="/Users/jovybz/Desktop/Backup_script_test_env/Folder_A_new"
 
@@ -25,6 +25,7 @@ fi
 
 # backup logic
 if [ -d $jovybz_main_drive ]; then
+    mv "$jovybz_main_drive" /Users/jovybz/Desktop/Backup_script_test_env/Folder_A_org
     cp -r "$jovybz_main_drive" "$new_copy"
     if [ -d "$new_copy" ]; then
         echo "new folder copy successful "$new_copy""
