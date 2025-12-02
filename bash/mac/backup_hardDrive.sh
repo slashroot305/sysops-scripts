@@ -1,37 +1,45 @@
 #!/bin/bash
 
-#============================================#
+#===========================================================#
 # Scope:
 #
-# Description: Backs up logic folder from a
-#              working external hard drive 
-#              location to a back up hard
-#              drive location.
+# Description: Backs up folder from one location to another.
+#
 # Version: 1.0
-#============================================#
+#===========================================================#
 
-# set backup locations
-jovybz_main_drive="/Users/jovybz/Desktop/Backup_script_test_env/Folder_A"
-backup_drive="/Users/jovybz/Desktop/Backup_script_test_env/Folder_B"
-new_copy="/Users/jovybz/Desktop/Backup_script_test_env/Folder_A_new"
+# define source and destination locations
+source_path="/path/to/source"
+destination_path="/path/to/destination"
+main_copy_path="/path/to/main copy"
+backup_copy_path="/path/to/backup copy"
 
 # check source and destination paths exists
-if [ -d "$jovybz_main_drive" ] && [ -d "$backup_drive" ]; then
-    echo "path exists "$jovybz_main_drive""
-    echo "path exists "$backup_drive""
+if [ -d "$source_path" ] && [ -d "$destination_path" ]; then
+    echo "source path exists: "$source_path""
+    echo "desitnation path exists: "$destination_path""
 else
-    echo "paths do not exist. check 'jovybz main' and 'backup' paths"
+    echo "both paths does not exist. check source and destination paths"
 fi
 
-# backup logic
-if [ -d $jovybz_main_drive ]; then
-    mv "$jovybz_main_drive" /Users/jovybz/Desktop/Backup_script_test_env/Folder_A_org
-    cp -r "$jovybz_main_drive" "$new_copy"
-    if [ -d "$new_copy" ]; then
-        echo "new folder copy successful "$new_copy""
+# duplicate source folder in source location and send duplicate to backup drive
+if [ -d "$source_path" ]; then
+    rsync -avh --info=progress2 "$source_path" "$main_copy_path"
+    sleep 3
+    if [ -d "$main_copy_path" ]; then
+        echo "duplicate successful"
+        echo "moving duplicate to backup now..."
+        sleep 2
+        mv "$main_copy_path" "$destination_path"
+        sleep 1
+        if [ -d "$backup_copy_path" ]; then
+            echo "move successful"
+        fi
     else
-        echo "No new copies found"
+        echo "copy of $main_copy_path not successful so move failed"
+        echo "check rsync command and paths"
     fi
+
 else
-    echo "path does not exist. check 'jovybz main' path"
+    echo "check source path $source_path"
 fi
