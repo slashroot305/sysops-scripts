@@ -214,7 +214,7 @@ aB3dE9fG2hI7jK1m
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/slashroot305/programs_and_scripts
+git clone https://github.com/slashroot305/programs_and_scripts.git
 cd programs_and_scripts
 ```
 
