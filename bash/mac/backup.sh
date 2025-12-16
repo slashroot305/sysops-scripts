@@ -19,7 +19,7 @@ if [ -d "$source_path" ] && [ -d "$destination_path" ]; then
     echo "source path exists: "$source_path""
     echo "desitnation path exists: "$destination_path""
 else
-    echo "both paths does not exist. check source and destination paths"
+    echo "both paths do not exist. check source and destination paths"
 fi
 
 # duplicate source folder in source location and send duplicate to backup drive
