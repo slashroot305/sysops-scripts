@@ -25,21 +25,22 @@ fi
 # duplicate source folder in source location and send duplicate to backup drive
 if [ -d "$source_path" ]; then
     rsync -avh --info=progress2 "$source_path" "$main_copy_path"
-    sleep 3
+    sleep 2
     if [ -d "$main_copy_path" ]; then
         echo "duplicate successful"
         echo "moving duplicate to backup now..."
         sleep 2
         mv "$main_copy_path" "$destination_path"
-        sleep 1
+        sleep 2
         if [ -d "$backup_copy_path" ]; then
             echo "move successful"
         fi
     else
-        echo "copy of $main_copy_path not successful so move failed"
+        echo "moving $main_copy_path failed"
         echo "check rsync command and paths"
     fi
 
 else
-    echo "check source path $source_path"
+    echo "cannot find $source_path"
+    echo "check path and try again"
 fi
