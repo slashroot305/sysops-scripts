@@ -37,7 +37,7 @@ A collection of system administration, automation, and utility scripts for Linux
 sudo ./ebpf-enabler.sh
 ```
 
-**⚠️ Security Warning:** Enabling unprivileged eBPF introduces security risks. Only use in trusted environments.
+**Security Warning:** Enabling unprivileged eBPF introduces security risks. Only use in trusted environments.
 
 -----
 
@@ -49,16 +49,17 @@ sudo ./ebpf-enabler.sh
 **Features:**
 
 - Validates source and destination paths before backup
-- Creates complete directory copies using `cp -r`
+- Creates complete directory copies using `rsync`
 - Provides feedback on backup success/failure
 
 **Configuration:**
 Edit the script to set your paths:
 
 ```bash
-jovybz_main_drive="/path/to/source/"
-backup_drive="/path/to/destination"
-new_copy="/path/to/new/copy"
+source_path="/path/to/source"
+destination_path="/path/to/destination"
+main_copy_path="/path/to/main copy"
+backup_copy_path="/path/to/backup copy"
 ```
 
 **Usage:**
@@ -213,8 +214,8 @@ aB3dE9fG2hI7jK1m
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/system-admin-scripts.git
-cd system-admin-scripts
+git clone https://github.com/slashroot305/programs_and_scripts
+cd programs_and_scripts
 ```
 
 1. **Make scripts executable (Linux/macOS):**
@@ -243,7 +244,7 @@ python3 password-generator.py
 
 ## Security Considerations
 
-### ⚠️ Important Security Notes
+### Important Security Notes
 
 1. **eBPF Enabler:** Enabling unprivileged eBPF can expose your system to local privilege escalation vulnerabilities. Only use in controlled, trusted environments.
 1. **Software Validation Script:**
