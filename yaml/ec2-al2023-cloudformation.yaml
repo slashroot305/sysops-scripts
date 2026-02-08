@@ -15,9 +15,9 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Existing EC2 KeyPair to allow SSH access
 
-  LatestUbuntuAmiId:
+  LatestAmazonLinuxAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: /aws/service/ami-canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
     Description: |
       *** THIS IS WHERE THE OS IS CHOSEN ***
       Change this SSM parameter to select a different OS
@@ -38,7 +38,7 @@ Resources:
     Properties:
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
-      ImageId: !Ref LatestUbuntuAmiId
+      ImageId: !Ref LatestAmazonLinuxAmiId
       SecurityGroupIds:
         - !Ref EC2SecurityGroup
       Tags:
