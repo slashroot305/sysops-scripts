@@ -146,15 +146,6 @@ DataType          : SEP Check
 - Input validation and error handling
 - Manual exit option (enter `9`)
 
-**Car Matches:**
-
-- Genesis → G70
-- Audi → RS3
-- BMW → M3
-- Cadillac → CT4-V
-- Mercedes-AMG → C63
-- Acura → Type S
-
 **Usage:**
 
 ```bash
@@ -166,7 +157,7 @@ python3 car-game.py
 ### 6. **Secure Password Generator** (`password-generator.py`)
 
 **Platform:** Cross-platform (Python)  
-**Purpose:** Generates cryptographically secure random 16-character passwords.
+**Purpose:** Generates cryptographically secure random 16-character tokens.
 
 **Features:**
 
