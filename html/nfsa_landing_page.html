@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Nana Frimpong Sintim-Aboagye">
+<meta name="copyright" content="© 2026 Nana Frimpong Sintim-Aboagye. All Rights Reserved.">
+<title>Elite Raiders Soccer — NFSA Elite Development Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black:    #080807;
+  --ink:      #0E0E0C;
+  --ink2:     #161614;
+  --ink3:     #1E1E1B;
+  --ink4:     #272724;
+  --green:    #0C6B50;
+  --lime:     #18B872;
+  --lime2:    #4DD49A;
+  --lime3:    rgba(24,184,114,0.08);
+  --gold:     #C8890A;
+  --gold2:    #F0AE2A;
+  --gold3:    rgba(240,174,42,0.1);
+  --red:      #B83030;
+  --red2:     #E05555;
+  --cream:    #F2EEE4;
+  --cream2:   #D8D4C8;
+  --mist:     #888070;
+  --mist2:    #5A5650;
+  --blue:     #2A6DB5;
+  --blue2:    #5A9FE8;
+  --purple:   #6B4FB5;
+  --orange:   #C86020;
+  --orange2:  #F07840;
+  --r:        5px;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--black);
+  color: var(--cream);
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ═══════════════════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════════════════ */
+#cur { width:10px;height:10px;background:var(--lime);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s; }
+#cur-r { width:40px;height:40px;border:1.5px solid rgba(24,184,114,.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease,width .22s,height .22s,border-color .2s; }
+
+/* ═══════════════════════════════════════════════════════
+   NOISE LAYER
+═══════════════════════════════════════════════════════ */
+body::after {
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.022;pointer-events:none;z-index:999;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════════════ */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(20px,5vw,80px);height:62px;
+  background:rgba(8,8,7,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(24,184,114,.1);
+  transition:background .3s;
+}
+.nav-logo { font-size:15px;font-weight:800;letter-spacing:4px;color:var(--cream); }
+.nav-logo span { color:var(--lime); }
+.nav-links { display:flex;gap:32px;list-style:none; }
+.nav-links a { font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mist);transition:color .2s; }
+.nav-links a:hover { color:var(--lime); }
+.nav-cta {
+  background:var(--lime);color:var(--black) !important;
+  padding:8px 22px;border-radius:var(--r);font-weight:700 !important;
+  transition:background .2s,transform .15s !important;box-shadow:0 0 24px rgba(24,184,114,.2);
+}
+.nav-cta:hover { background:var(--lime2) !important;transform:translateY(-1px); }
+@media(max-width:800px){.nav-links{display:none;}}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════════ */
+.section-tag {
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--lime);margin-bottom:18px;
+}
+.section-tag::before { content:'';width:22px;height:1.5px;background:var(--lime); }
+.h2 {
+  font-size:clamp(40px,5.5vw,76px);font-weight:800;line-height:.93;
+  letter-spacing:-1px;color:var(--cream);margin-bottom:18px;
+}
+.h2 em { font-family:'Instrument Serif',serif;font-style:italic;color:var(--lime);font-weight:400; }
+.h2 .gold { color:var(--gold2); }
+.body-text { font-size:15px;font-weight:400;color:var(--mist);line-height:1.8;max-width:580px; }
+
+.reveal { opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease; }
+.reveal.in { opacity:1;transform:none; }
+.d1{transition-delay:.1s;} .d2{transition-delay:.18s;} .d3{transition-delay:.26s;} .d4{transition-delay:.34s;} .d5{transition-delay:.42s;} .d6{transition-delay:.5s;}
+
+section { padding:clamp(80px,10vw,130px) clamp(20px,6vw,90px); }
+.divider { height:1px;background:rgba(255,255,255,.05);margin:0; }
+
+/* ═══════════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════════ */
+#hero {
+  min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:62px clamp(20px,6vw,90px) 0;position:relative;overflow:hidden;
+}
+.hero-bg {
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 65% 55% at 80% 45%,rgba(12,107,80,.18) 0%,transparent 65%),
+    radial-gradient(ellipse 35% 60% at 15% 85%,rgba(200,137,10,.07) 0%,transparent 55%);
+}
+/* Grid lines */
+.hero-grid {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(24,184,114,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(24,184,114,.04) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%);
+}
+.hero-content {
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:flex-end;
+  padding-top:80px;
+}
+@media(max-width:900px){.hero-content{grid-template-columns:1fr;gap:40px;padding-top:60px;}}
+.hero-eyebrow {
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--lime);margin-bottom:20px;display:flex;align-items:center;gap:10px;
+  opacity:0;animation:fadeUp .7s .1s forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1.5px;background:var(--lime);}
+.hero-h1 {
+  font-size:clamp(72px,9vw,140px);font-weight:800;line-height:.88;
+  letter-spacing:-2px;color:var(--cream);margin-bottom:28px;
+  opacity:0;animation:fadeUp .8s .2s forwards;
+}
+.hero-h1 .line-green { color:var(--lime);display:block; }
+.hero-h1 .line-gold { color:var(--gold2);display:block; }
+.hero-desc {
+  font-size:16px;color:var(--mist);line-height:1.8;max-width:500px;
+  font-weight:400;margin-bottom:36px;
+  opacity:0;animation:fadeUp .8s .32s forwards;
+}
+.hero-desc strong { color:var(--cream2);font-weight:600; }
+.hero-btns {
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .8s .44s forwards;
+}
+.btn-main {
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--lime);color:var(--black);
+  font-size:13px;font-weight:700;letter-spacing:.5px;
+  padding:15px 30px;border-radius:var(--r);border:none;cursor:pointer;
+  transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 4px 28px rgba(24,184,114,.28);
+}
+.btn-main:hover{background:var(--lime2);transform:translateY(-2px);box-shadow:0 8px 36px rgba(24,184,114,.38);}
+.btn-ghost {
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--mist);font-size:13px;font-weight:600;
+  border:1.5px solid rgba(255,255,255,.1);padding:14px 24px;border-radius:var(--r);
+  transition:all .2s;
+}
+.btn-ghost:hover{color:var(--lime);border-color:rgba(24,184,114,.4);}
+
+/* Hero right — stat blocks */
+.hero-right {
+  opacity:0;animation:fadeUp .9s .5s forwards;
+  display:flex;flex-direction:column;gap:16px;
+}
+@media(max-width:900px){.hero-right{display:none;}}
+.hero-stat-card {
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:20px 24px;display:flex;gap:20px;align-items:center;
+  transition:border-color .2s,background .2s;
+}
+.hero-stat-card:hover{border-color:rgba(24,184,114,.2);background:rgba(24,184,114,.04);}
+.hsc-num {
+  font-size:42px;font-weight:800;line-height:1;
+  color:var(--gold2);letter-spacing:-1px;flex-shrink:0;min-width:80px;
+}
+.hsc-label { font-size:13px;font-weight:600;color:var(--cream2);margin-bottom:4px; }
+.hsc-desc { font-size:11px;color:var(--mist);line-height:1.5; }
+
+/* Hero bottom ticker */
+.hero-ticker {
+  position:relative;z-index:1;margin-top:60px;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;gap:0;
+  opacity:0;animation:fadeUp .8s .6s forwards;
+}
+.ticker-item {
+  flex:1;padding:22px 0 32px;
+  border-right:1px solid rgba(255,255,255,.05);
+  padding-right:28px;
+}
+.ticker-item:not(:first-child){padding-left:28px;}
+.ticker-item:last-child{border-right:none;}
+.ti-num{font-size:40px;font-weight:800;color:var(--lime);letter-spacing:-1px;line-height:1;margin-bottom:3px;}
+.ti-label{font-size:10px;color:var(--mist);text-transform:uppercase;letter-spacing:2px;}
+@media(max-width:600px){.hero-ticker{flex-wrap:wrap;}.ticker-item{min-width:50%;}}
+
+/* ═══════════════════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════════════════ */
+.marquee-bar{background:var(--lime);padding:13px 0;overflow:hidden;white-space:nowrap;}
+.marquee-track{display:inline-block;animation:marquee 20s linear infinite;}
+.m-item{display:inline-block;font-size:16px;font-weight:800;letter-spacing:2.5px;color:var(--black);padding:0 44px;}
+.m-dot{display:inline-block;width:5px;height:5px;background:rgba(8,8,7,.3);border-radius:50%;vertical-align:middle;}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ═══════════════════════════════════════════════════════
+   OFF-SEASON SECTION
+═══════════════════════════════════════════════════════ */
+#offseason { background:var(--ink);position:relative;overflow:hidden; }
+#offseason::before {
+  content:'';position:absolute;top:-30%;right:-15%;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(200,137,10,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.offseason-intro {
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  align-items:start;margin-bottom:80px;
+}
+@media(max-width:900px){.offseason-intro{grid-template-columns:1fr;gap:40px;}}
+
+/* Phase tabs */
+.os-tabs {
+  display:flex;gap:4px;flex-wrap:wrap;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  margin-bottom:40px;
+}
+.os-tab {
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:12px 18px;color:var(--mist);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:color .2s,border-color .2s;user-select:none;
+}
+.os-tab:hover{color:var(--cream);}
+.os-tab.active{color:var(--gold2);border-bottom-color:var(--gold2);}
+.os-panel{display:none;}
+.os-panel.active{display:block;}
+
+/* Week blocks */
+.week-grid {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;
+}
+.week-card {
+  background:var(--ink2);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+}
+.week-card:hover{border-color:rgba(240,174,42,.2);transform:translateY(-3px);}
+.wc-header {
+  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.wc-week { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mist); }
+.wc-focus {
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:3px;
+}
+.wc-body { padding:16px 18px; }
+.wc-day {
+  display:flex;gap:10px;padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.03);
+  font-size:12px;
+}
+.wc-day:last-child{border-bottom:none;}
+.wc-day-label { font-weight:700;color:var(--mist2);min-width:32px;font-size:11px; }
+.wc-day-content { color:var(--cream2);line-height:1.5; }
+.wc-day-content span { display:block;font-size:10px;color:var(--mist);margin-top:2px; }
+
+/* Fitness pillars */
+.fitness-pillars {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;
+  margin-top:60px;
+}
+.fp-card {
+  background:var(--ink2);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:24px;
+  position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+}
+.fp-card:hover{border-color:var(--fp-color,var(--lime));transform:translateY(-3px);}
+.fp-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--fp-color,var(--lime));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s;
+}
+.fp-card:hover::before{transform:scaleX(1);}
+.fp-icon{font-size:26px;margin-bottom:12px;}
+.fp-title{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:6px;}
+.fp-text{font-size:12px;color:var(--mist);line-height:1.7;}
+
+/* Individual vs Team toggle */
+.toggle-wrap {
+  display:flex;align-items:center;gap:16px;margin-bottom:32px;
+}
+.toggle-label{font-size:12px;font-weight:600;color:var(--mist);letter-spacing:1px;text-transform:uppercase;}
+.toggle-label.active{color:var(--lime);}
+.toggle-switch {
+  width:52px;height:28px;background:var(--ink3);border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;position:relative;
+  transition:background .2s;
+}
+.toggle-switch.on{background:rgba(24,184,114,.2);border-color:var(--lime);}
+.toggle-knob {
+  width:20px;height:20px;background:var(--mist);border-radius:50%;
+  position:absolute;top:3px;left:4px;transition:left .2s,background .2s;
+}
+.toggle-switch.on .toggle-knob{left:28px;background:var(--lime);}
+
+/* Workout table */
+.workout-table { width:100%;border-collapse:collapse;margin-top:24px; }
+.workout-table th {
+  text-align:left;font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--mist);padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.workout-table td {
+  padding:12px 14px;font-size:13px;color:var(--cream2);
+  border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;
+}
+.workout-table tr:hover td{background:rgba(255,255,255,.02);}
+.workout-table td:first-child{font-weight:700;color:var(--lime);font-family:'DM Mono',monospace;font-size:11px;}
+.workout-table td:nth-child(2){font-weight:600;color:var(--cream);}
+.wt-tag {
+  display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-top:4px;
+}
+
+/* Mental section */
+.mental-grid {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;
+  margin-top:32px;
+}
+.mental-card {
+  background:var(--ink3);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:24px;
+  transition:border-color .2s;
+}
+.mental-card:hover{border-color:rgba(106,79,181,.3);}
+.mc-icon{font-size:24px;margin-bottom:12px;}
+.mc-title{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:8px;}
+.mc-text{font-size:12px;color:var(--mist);line-height:1.7;}
+
+/* Nutrition callout */
+.nutrition-block {
+  background:var(--gold3);border:1px solid rgba(240,174,42,.2);
+  border-radius:12px;padding:32px 36px;margin-top:48px;
+  display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start;
+}
+@media(max-width:600px){.nutrition-block{grid-template-columns:1fr;}}
+.nb-icon{font-size:44px;}
+.nb-title{font-size:18px;font-weight:700;color:var(--cream);margin-bottom:8px;}
+.nb-text{font-size:13px;color:var(--mist);line-height:1.75;}
+.nb-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.nb-pill{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:rgba(240,174,42,.12);border:1px solid rgba(240,174,42,.25);color:var(--gold2);}
+
+/* ═══════════════════════════════════════════════════════
+   PROGRAM FEATURES
+═══════════════════════════════════════════════════════ */
+#features { background:var(--ink2); }
+.features-bento {
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:auto;
+  gap:12px;margin-top:60px;
+}
+.fb { background:var(--ink3);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s; }
+.fb:hover{border-color:rgba(24,184,114,.25);transform:translateY(-3px);}
+.fb::before{content:attr(data-ghost);position:absolute;bottom:-10px;right:-4px;font-size:80px;font-weight:800;color:rgba(255,255,255,.025);line-height:1;pointer-events:none;}
+.fb-1{grid-column:span 2;}
+.fb-2{grid-column:span 2;}
+.fb-3{grid-column:span 2;}
+.fb-4{grid-column:span 3;}
+.fb-5{grid-column:span 3;}
+.fb-6{grid-column:span 4;}
+.fb-7{grid-column:span 2;}
+@media(max-width:900px){.features-bento{grid-template-columns:1fr 1fr;}.fb-1,.fb-2,.fb-3,.fb-4,.fb-5,.fb-6,.fb-7{grid-column:span 1;}}
+@media(max-width:580px){.features-bento{grid-template-columns:1fr;}.fb-1,.fb-2,.fb-3,.fb-4,.fb-5,.fb-6,.fb-7{grid-column:span 1;}}
+.fb-accent{width:100%;height:2px;border-radius:2px;margin-bottom:20px;}
+.fb-icon{font-size:26px;margin-bottom:14px;}
+.fb-title{font-size:16px;font-weight:700;color:var(--cream);margin-bottom:8px;line-height:1.3;}
+.fb-desc{font-size:12.5px;color:var(--mist);line-height:1.75;}
+.fb-stat{font-size:36px;font-weight:800;color:var(--gold2);letter-spacing:-1px;margin-bottom:6px;}
+
+/* ═══════════════════════════════════════════════════════
+   PRESSING SECTION
+═══════════════════════════════════════════════════════ */
+#pressing{background:var(--black);position:relative;overflow:hidden;}
+#pressing::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(24,184,114,.03) 79px,rgba(24,184,114,.03) 80px),repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(24,184,114,.03) 79px,rgba(24,184,114,.03) 80px);pointer-events:none;}
+.press-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:56px;}
+@media(max-width:700px){.press-grid{grid-template-columns:1fr;}}
+.pc{background:var(--ink2);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:30px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+.pc:hover{border-color:var(--pc-col,var(--lime));transform:translateY(-4px);}
+.pc::after{content:attr(data-n);font-size:90px;font-weight:800;color:rgba(255,255,255,.025);position:absolute;bottom:-12px;right:12px;line-height:1;pointer-events:none;}
+.pc-nfl{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pc-col,var(--lime));border:1px solid var(--pc-col,var(--lime));border-radius:3px;padding:3px 8px;margin-bottom:14px;opacity:.8;}
+.pc-title{font-size:20px;font-weight:700;color:var(--cream);margin-bottom:10px;line-height:1.2;}
+.pc-desc{font-size:13px;color:var(--mist);line-height:1.75;}
+.pc-trigger{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.05);font-size:11px;color:var(--mist);}
+.pc-trigger strong{color:var(--pc-col,var(--lime));}
+
+/* ═══════════════════════════════════════════════════════
+   POSITIONS
+═══════════════════════════════════════════════════════ */
+#positions{background:var(--ink);}
+.pos-tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06);margin-top:48px;margin-bottom:36px;}
+.pos-tab{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:11px 16px;color:var(--mist);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;user-select:none;}
+.pos-tab:hover{color:var(--cream);}
+.pos-tab.active{color:var(--lime);border-bottom-color:var(--lime);}
+.pos-panel{display:none;}
+.pos-panel.active{display:grid;grid-template-columns:1fr 1.3fr;gap:56px;align-items:start;}
+@media(max-width:800px){.pos-panel.active{grid-template-columns:1fr;gap:28px;}}
+.pos-title{font-size:clamp(36px,4vw,54px);font-weight:800;color:var(--cream);letter-spacing:-1px;line-height:1;margin-bottom:10px;}
+.pos-sub{font-size:13px;color:var(--mist);line-height:1.75;margin-bottom:20px;}
+.pos-attrs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.pos-attr{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px;}
+.pos-drills{display:flex;flex-direction:column;gap:10px;}
+.pos-drill{background:var(--ink3);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:16px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s;}
+.pos-drill:hover{border-color:rgba(24,184,114,.2);}
+.pd-num{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:rgba(24,184,114,.25);line-height:1;flex-shrink:0;width:30px;}
+.pd-name{font-size:13px;font-weight:700;color:var(--cream2);margin-bottom:4px;}
+.pd-desc{font-size:12px;color:var(--mist);line-height:1.65;}
+
+/* ═══════════════════════════════════════════════════════
+   PROOF / WHY IT WORKS
+═══════════════════════════════════════════════════════ */
+#proof{background:var(--ink2);text-align:center;}
+.proof-pull {
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:clamp(22px,3.2vw,38px);color:var(--cream);
+  line-height:1.45;max-width:820px;margin:44px auto;
+}
+.proof-pull em{font-style:normal;color:var(--lime);}
+.proof-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;text-align:left;}
+@media(max-width:700px){.proof-cards{grid-template-columns:1fr;}}
+.proof-card{background:var(--ink3);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:26px;transition:transform .2s,border-color .2s;}
+.proof-card:hover{transform:translateY(-4px);border-color:rgba(24,184,114,.2);}
+.proof-icon{font-size:26px;margin-bottom:12px;}
+.proof-title{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:8px;}
+.proof-text{font-size:12.5px;color:var(--mist);line-height:1.75;}
+
+/* ═══════════════════════════════════════════════════════
+   PRICING
+═══════════════════════════════════════════════════════ */
+#pricing{background:var(--black);}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;align-items:start;}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr;max-width:440px;}}
+.price-card{background:var(--ink2);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:34px 28px;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s;}
+.price-card:hover{transform:translateY(-6px);border-color:rgba(24,184,114,.25);box-shadow:0 16px 48px rgba(0,0,0,.5);}
+.price-card.hot{border-color:var(--lime);background:rgba(12,107,80,.1);}
+.price-card.hot::before{content:'MOST POPULAR';position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--black);font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 14px;border-radius:20px;}
+.pt{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.pn{font-size:26px;font-weight:800;color:var(--cream);margin-bottom:6px;letter-spacing:-0.5px;}
+.pd{font-size:12.5px;color:var(--mist);line-height:1.65;margin-bottom:20px;}
+.pp{font-size:52px;font-weight:800;color:var(--cream);letter-spacing:-2px;line-height:1;}
+.pp sup{font-size:22px;vertical-align:super;letter-spacing:0;}
+.pp-per{font-size:12px;color:var(--mist);margin-bottom:24px;margin-top:2px;}
+.p-div{height:1px;background:rgba(255,255,255,.06);margin:20px 0;}
+.p-feats{display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.p-feat{display:flex;gap:10px;font-size:12.5px;color:var(--cream2);}
+.p-feat::before{content:'✓';color:var(--lime);font-weight:700;flex-shrink:0;}
+.p-feat.no{color:var(--mist2);}
+.p-feat.no::before{content:'–';color:rgba(255,255,255,.12);}
+.btn-po{display:block;width:100%;text-align:center;padding:13px;border-radius:var(--r);font-size:13px;font-weight:700;letter-spacing:.3px;border:none;cursor:pointer;transition:all .2s;}
+.btn-po-out{background:transparent;border:1.5px solid rgba(255,255,255,.12);color:var(--cream);}
+.btn-po-out:hover{border-color:var(--lime);color:var(--lime);}
+.btn-po-fill{background:var(--lime);color:var(--black);}
+.btn-po-fill:hover{background:var(--lime2);transform:translateY(-2px);}
+.btn-po-gold{background:var(--gold2);color:var(--black);}
+.btn-po-gold:hover{background:#f5c040;transform:translateY(-2px);}
+
+/* compare row */
+.compare-note{text-align:center;margin-top:24px;font-size:12px;color:var(--mist);line-height:1.6;}
+.compare-note strong{color:var(--cream2);}
+
+/* ═══════════════════════════════════════════════════════
+   SETPLAYS CALLOUT
+═══════════════════════════════════════════════════════ */
+.setplays-bar {
+  background:var(--gold3);border-top:1px solid rgba(240,174,42,.15);border-bottom:1px solid rgba(240,174,42,.15);
+  padding:32px clamp(20px,6vw,90px);
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+}
+@media(max-width:700px){.setplays-bar{grid-template-columns:1fr;gap:20px;}}
+.sp-title{font-size:18px;font-weight:700;color:var(--cream);margin-bottom:6px;}
+.sp-text{font-size:13px;color:var(--mist);line-height:1.7;}
+.sp-plays{display:flex;gap:10px;flex-wrap:wrap;}
+.sp-play{font-size:11px;font-weight:700;letter-spacing:1px;padding:6px 14px;border-radius:4px;background:rgba(240,174,42,.12);border:1px solid rgba(240,174,42,.25);color:var(--gold2);}
+
+/* ═══════════════════════════════════════════════════════
+   FINAL CTA
+═══════════════════════════════════════════════════════ */
+#cta{background:var(--green);text-align:center;position:relative;overflow:hidden;padding:clamp(90px,12vw,150px) clamp(20px,6vw,90px);}
+#cta::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 60%);pointer-events:none;}
+#cta::after{content:'ELITE';position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);font-size:260px;font-weight:800;color:rgba(0,0,0,.1);letter-spacing:8px;white-space:nowrap;pointer-events:none;}
+.cta-inner{position:relative;z-index:1;}
+.cta-h{font-size:clamp(52px,7vw,108px);font-weight:800;line-height:.9;letter-spacing:-2px;color:#fff;margin-bottom:20px;}
+.cta-sub{font-size:17px;color:rgba(255,255,255,.7);line-height:1.75;max-width:520px;margin:0 auto 40px;font-weight:400;}
+.cta-btn{display:inline-flex;align-items:center;gap:10px;background:var(--gold2);color:var(--black);font-size:14px;font-weight:700;letter-spacing:.5px;padding:17px 38px;border-radius:var(--r);border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 28px rgba(0,0,0,.3);}
+.cta-btn:hover{background:#f5c040;transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4);}
+.cta-note{margin-top:16px;font-size:12px;color:rgba(255,255,255,.4);}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════ */
+footer{background:var(--black);border-top:1px solid rgba(255,255,255,.05);padding:44px clamp(20px,6vw,90px);}
+.footer-row{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap;}
+.footer-brand{font-size:14px;font-weight:800;letter-spacing:3px;color:var(--cream);}
+.footer-brand span{color:var(--lime);}
+.footer-by{font-size:11px;color:var(--mist);margin-top:4px;}
+.footer-copy{font-size:10.5px;color:var(--mist2);line-height:1.85;max-width:480px;}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-links a{font-size:11px;color:var(--mist);transition:color .2s;}
+.footer-links a:hover{color:var(--lime);}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- CONTACT BAR -->
+<div style="background:#0C6B50;padding:7px clamp(20px,5vw,80px);display:flex;align-items:center;justify-content:flex-end;gap:24px;flex-wrap:wrap;">
+  <a href="tel:+13318030897" style="color:rgba(255,255,255,.85);font-size:11px;font-weight:600;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    (331) 803-0897
+  </a>
+  <span style="color:rgba(255,255,255,.25);font-size:11px;">|</span>
+  <a href="mailto:NFSA@eliteraiderssoccer.com" style="color:rgba(255,255,255,.85);font-size:11px;font-weight:600;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    NFSA@eliteraiderssoccer.com
+  </a>
+  <span style="color:rgba(255,255,255,.25);font-size:11px;">|</span>
+  <span style="color:rgba(255,255,255,.55);font-size:11px;font-weight:600;letter-spacing:1px;">ELITE RAIDERS SOCCER</span>
+</div>
+
+<!-- ─── NAV ─────────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="nav-logo">ELITE RAIDERS <span>SOCCER</span></div>
+  <ul class="nav-links">
+    <li><a href="#offseason">Off-Season</a></li>
+    <li><a href="#features">Program</a></li>
+    <li><a href="#pressing">Tactics</a></li>
+    <li><a href="#positions">Positions</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#cta" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">Elite Raiders Soccer · Ages 12–19 · 12-Month System</div>
+      <h1 class="hero-h1">
+        BUILD<br>
+        <span class="line-green">ELITE.</span><br>
+        <span class="line-gold">STAY ELITE.</span>
+      </h1>
+      <p class="hero-desc">
+        The only youth soccer program that combines a <strong>6-month in-season tactical system</strong> with a <strong>complete off-season fitness and conditioning plan</strong> — so your players peak during the season and never fall behind between them.
+      </p>
+      <div class="hero-btns">
+        <a href="#pricing" class="btn-main">
+          View Packages
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#offseason" class="btn-ghost">See Off-Season Plan →</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat-card">
+        <div class="hsc-num">12</div>
+        <div><div class="hsc-label">Months of Development</div><div class="hsc-desc">6-month in-season program + complete off-season conditioning plan. No off-month for elite players.</div></div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hsc-num">90+</div>
+        <div><div class="hsc-label">Original Drills & Sessions</div><div class="hsc-desc">Technical, tactical, intensity, and position-specific — every drill labeled and diagrammed.</div></div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hsc-num">4</div>
+        <div><div class="hsc-label">NFL-Style Press Systems</div><div class="hsc-desc">Gegenpress, 4-4-2 block, man-oriented, and trap press — translated from football's defensive playbook.</div></div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hsc-num">6</div>
+        <div><div class="hsc-label">Position Group Programs</div><div class="hsc-desc">CBs, fullbacks, DMs, CMs, wingers, and strikers each train for what their role demands at elite level.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-ticker">
+    <div class="ticker-item"><div class="ti-num">180+</div><div class="ti-label">Training Hours</div></div>
+    <div class="ticker-item"><div class="ti-num">24</div><div class="ti-label">Weeks In-Season</div></div>
+    <div class="ticker-item"><div class="ti-num">16</div><div class="ti-label">Weeks Off-Season</div></div>
+    <div class="ticker-item"><div class="ti-num">11</div><div class="ti-label">Positions Trained</div></div>
+    <div class="ticker-item"><div class="ti-num">4</div><div class="ti-label">Press Systems</div></div>
+  </div>
+</section>
+
+<!-- ─── MARQUEE ──────────────────────────────────────────── -->
+<div class="marquee-bar" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="m-item">POSITIONAL PLAY</span><span class="m-dot"></span>
+    <span class="m-item">OFF-SEASON FITNESS</span><span class="m-dot"></span>
+    <span class="m-item">NFL PRESSING SYSTEMS</span><span class="m-dot"></span>
+    <span class="m-item">POSITION GROUPS</span><span class="m-dot"></span>
+    <span class="m-item">PERIODIZED CONDITIONING</span><span class="m-dot"></span>
+    <span class="m-item">WINGER ISOLATION</span><span class="m-dot"></span>
+    <span class="m-item">MENTAL RESILIENCE</span><span class="m-dot"></span>
+    <span class="m-item">GK DEVELOPMENT</span><span class="m-dot"></span>
+    <span class="m-item">POSITIONAL PLAY</span><span class="m-dot"></span>
+    <span class="m-item">OFF-SEASON FITNESS</span><span class="m-dot"></span>
+    <span class="m-item">NFL PRESSING SYSTEMS</span><span class="m-dot"></span>
+    <span class="m-item">POSITION GROUPS</span><span class="m-dot"></span>
+    <span class="m-item">PERIODIZED CONDITIONING</span><span class="m-dot"></span>
+    <span class="m-item">WINGER ISOLATION</span><span class="m-dot"></span>
+    <span class="m-item">MENTAL RESILIENCE</span><span class="m-dot"></span>
+    <span class="m-item">GK DEVELOPMENT</span><span class="m-dot"></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     OFF-SEASON FITNESS PLAN
+═══════════════════════════════════════════════════════ -->
+<section id="offseason">
+  <div class="offseason-intro">
+    <div>
+      <div class="section-tag reveal">NEW — Off-Season System</div>
+      <h2 class="h2 reveal d1">The off-season<br>is where <em>champions</em><br>are <span class="gold">built.</span></h2>
+    </div>
+    <div>
+      <p class="body-text reveal d2">Most players spend their off-season losing what they gained. This 16-week off-season plan is built specifically around the physical and mental demands of the NFSA program — so every player returns fitter, stronger, faster, and mentally sharper than they left.</p>
+      <p class="body-text reveal d3" style="margin-top:16px;">Structured across four blocks: <strong style="color:var(--cream2)">Recovery & Reset</strong>, <strong style="color:var(--cream2)">Strength Foundation</strong>, <strong style="color:var(--cream2)">Power & Speed</strong>, and <strong style="color:var(--cream2)">Pre-Season Ramp</strong>. Both individual and team tracks included.</p>
+    </div>
+  </div>
+
+  <!-- Physical Pillars -->
+  <div class="section-tag reveal">Physical Foundation</div>
+  <h3 style="font-size:clamp(24px,3vw,36px);font-weight:800;color:var(--cream);margin-bottom:32px;letter-spacing:-0.5px;" class="reveal d1">What the program physically demands — and how the off-season builds it</h3>
+  <div class="fitness-pillars">
+    <div class="fp-card reveal" style="--fp-color:#18B872;">
+      <div class="fp-icon">⚡</div>
+      <div class="fp-title">Explosive Speed</div>
+      <div class="fp-text">High-press triggers and 1v1 winger isolation require 0–10 yard burst acceleration. Off-season: overspeed training, resistance sprints, and plyometric progressions build the fast-twitch base.</div>
+    </div>
+    <div class="fp-card reveal d1" style="--fp-color:#F0AE2A;">
+      <div class="fp-icon">🏋️</div>
+      <div class="fp-title">Functional Strength</div>
+      <div class="fp-text">Aerial duels, hold-up play, and physical 1v1 battles demand whole-body strength. Off-season: compound lifts (squat, hip hinge, pull) build soccer-specific power without bulk.</div>
+    </div>
+    <div class="fp-card reveal d2" style="--fp-color:#5A9FE8;">
+      <div class="fp-icon">🫀</div>
+      <div class="fp-title">Aerobic Engine</div>
+      <div class="fp-text">Box-to-box midfielders and fullbacks run 8–11km per match. Off-season: zone 2 aerobic base work, lactate threshold intervals, and repeated sprint capacity training.</div>
+    </div>
+    <div class="fp-card reveal d3" style="--fp-color:#E05555;">
+      <div class="fp-icon">🦵</div>
+      <div class="fp-title">Injury Resilience</div>
+      <div class="fp-text">High-intensity year-round play creates overuse risk. Off-season: targeted hip, ankle, and knee stability work. Hamstring loading protocols. Reduce injury risk before it happens.</div>
+    </div>
+    <div class="fp-card reveal d4" style="--fp-color:#F07840;">
+      <div class="fp-icon">🔁</div>
+      <div class="fp-title">Change of Direction</div>
+      <div class="fp-text">Pressing, covering, and dribbling all require rapid direction changes. Off-season: lateral mechanics, deceleration training, and agility pattern work that transfers directly to the pitch.</div>
+    </div>
+    <div class="fp-card reveal d5" style="--fp-color:#6B4FB5;">
+      <div class="fp-icon">🧠</div>
+      <div class="fp-title">Mental Resilience</div>
+      <div class="fp-text">High-intensity, high-tempo soccer demands composure under fatigue. Off-season: mindset work, visualization protocols, pressure inoculation — so players perform when it matters most.</div>
+    </div>
+  </div>
+
+  <!-- Phase tabs -->
+  <div style="margin-top:72px;">
+    <div class="section-tag reveal">16-Week Off-Season Plan</div>
+    <h3 style="font-size:clamp(24px,3vw,36px);font-weight:800;color:var(--cream);margin-bottom:8px;letter-spacing:-0.5px;" class="reveal d1">Four blocks. Zero wasted weeks.</h3>
+    <p class="body-text reveal d2" style="margin-bottom:32px;">Each phase is calibrated for the NFSA player's specific demands — progressively building from recovery to peak pre-season readiness.</p>
+
+    <div class="os-tabs" id="osTabs">
+      <div class="os-tab active" onclick="switchOs('p1',this)">Block 1 — Recovery & Reset</div>
+      <div class="os-tab" onclick="switchOs('p2',this)">Block 2 — Strength Foundation</div>
+      <div class="os-tab" onclick="switchOs('p3',this)">Block 3 — Power & Speed</div>
+      <div class="os-tab" onclick="switchOs('p4',this)">Block 4 — Pre-Season Ramp</div>
+    </div>
+
+    <!-- BLOCK 1 -->
+    <div id="os-p1" class="os-panel active">
+      <p style="font-size:13px;color:var(--mist);margin-bottom:24px;line-height:1.75;max-width:700px;">
+        <strong style="color:var(--cream2)">Weeks 1–3 · Recovery & Reset.</strong> The body and mind need a true reset after a demanding 6-month season. Low load, high quality. Eliminate accumulated fatigue and begin structural preparation. No skipping this phase — it is the foundation everything else is built on.
+      </p>
+      <div class="week-grid">
+        <div class="week-card reveal">
+          <div class="wc-header">
+            <div class="wc-week">Week 1</div>
+            <div class="wc-focus" style="background:rgba(90,158,232,.12);color:var(--blue2);border:1px solid rgba(90,158,232,.2);">Active Recovery</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Light swimming or cycling 30 min<span>Zone 1 only — heart rate below 130bpm</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Yoga / mobility session 45 min<span>Focus: hip flexors, hamstrings, thoracic spine</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">REST<span>Full rest — no structured activity</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">Body weight movement circuit 30 min<span>Bodyweight squats, lunges, push-ups — no load</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Light jog 20 min + stretching<span>Conversational pace — easy breathing throughout</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">Fun sport / leisure activity<span>Basketball, tennis, anything enjoyable — no soccer</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d1">
+          <div class="wc-header">
+            <div class="wc-week">Weeks 2–3</div>
+            <div class="wc-focus" style="background:rgba(90,158,232,.12);color:var(--blue2);border:1px solid rgba(90,158,232,.2);">Structural Prep</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Stability & mobility — 45 min<span>Single-leg balance, hip CARs, ankle work, foam rolling</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Aerobic base run — 30 min<span>Zone 2 steady state. Heart rate 130–145bpm</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">REST or gentle yoga</div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">Intro strength — 45 min<span>Goblet squat, Romanian deadlift, band pull-apart — light load</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Tempo run — 25 min<span>Comfortable effort, 5-min warm-up, 5-min cool-down</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">Light ball work — 30 min<span>Touch and feel only — no drills, no pressure</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d2" style="background:var(--ink3);">
+          <div class="wc-header" style="border-color:rgba(255,255,255,.04);">
+            <div class="wc-week">Block 1 Targets</div>
+            <div class="wc-focus" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Outcomes</div>
+          </div>
+          <div class="wc-body">
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Resting HR returns to baseline (below 55bpm for trained players)</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Full hip, ankle & shoulder mobility restored</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Any overuse soreness resolved before Block 2</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Mental reset complete — motivation high again</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Structural joints loaded safely — tendons & ligaments prepared</div></div>
+            </div>
+            <div style="margin-top:20px;padding:14px;background:rgba(24,184,114,.06);border-radius:6px;border:1px solid rgba(24,184,114,.12);">
+              <div style="font-size:11px;font-weight:700;color:var(--lime);letter-spacing:1px;margin-bottom:6px;">COACH NOTE</div>
+              <div style="font-size:12px;color:var(--mist);line-height:1.65;">Never skip recovery block to "get ahead." Players who skip Block 1 peak earlier and decline during the season. Patience here pays dividends in Month 5.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 2 -->
+    <div id="os-p2" class="os-panel">
+      <p style="font-size:13px;color:var(--mist);margin-bottom:24px;line-height:1.75;max-width:700px;">
+        <strong style="color:var(--cream2)">Weeks 4–8 · Strength Foundation.</strong> Build the physical engine. Compound strength movements translated to soccer-specific power. Aerobic base extended. This phase makes players physically dominant on the ball, in the air, and in 1v1 duels — without over-bulking.
+      </p>
+      <div class="week-grid">
+        <div class="week-card reveal">
+          <div class="wc-header">
+            <div class="wc-week">Weeks 4–5 · Phase A</div>
+            <div class="wc-focus" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Strength</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Lower body strength — 60 min<span>Barbell squat 4×6, RDL 3×8, Bulgarian split 3×8/leg, hip thrust 3×10</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Aerobic interval run — 40 min<span>6×4 min at zone 3 (155–165bpm) / 2 min rest</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">Upper body + core — 55 min<span>Pull-ups 4×max, DB row 3×10, push-up variation, plank circuit, rotational core</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">Ball work — technical 45 min<span>Passing pairs, rondo 4v2, finishing circuit — moderate tempo</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Full body strength — 55 min<span>Trap bar deadlift 4×5, step-up 3×8, lateral band walk, Nordic hamstring 3×5</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">Long aerobic run — 50 min<span>Zone 2 steady state — builds cardiac output base</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST + mobility</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d1">
+          <div class="wc-header">
+            <div class="wc-week">Weeks 6–8 · Phase B</div>
+            <div class="wc-focus" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Progressive Load</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Heavy lower body — 65 min<span>Squat 5×5 (add 5–10% each week), single-leg press, hamstring curl, calf raises</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Speed endurance — 35 min<span>8×200m at 85% effort / 90 sec rest — builds repeated sprint capacity</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">Upper body + core power — 55 min<span>Med ball throws, rotational slams, cable chops, anti-rotation holds</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">Technical ball work — 50 min<span>Shooting circuit, 1v1 corridor, combination patterns — increasing tempo</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Full body compound — 60 min<span>Trap bar deadlift (progressive), DB lunges, rear-foot elevated split squat, Nordic hamstring</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">Small-sided game day — 60 min<span>5v5 or 6v6 — controlled intensity. Apply fitness to football context</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST + foam rolling</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d2">
+          <div class="wc-header">
+            <div class="wc-week">Strength Key Lifts</div>
+            <div class="wc-focus" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Reference</div>
+          </div>
+          <div class="wc-body">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+              <div style="font-size:11px;font-weight:700;color:var(--mist);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">Priority Movements</div>
+              <div style="font-size:12px;color:var(--cream2);"><strong style="color:var(--gold2);">Trap Bar Deadlift</strong> — total posterior chain, safe for young athletes</div>
+              <div style="font-size:12px;color:var(--cream2);"><strong style="color:var(--gold2);">Bulgarian Split Squat</strong> — single-leg strength, hip stability</div>
+              <div style="font-size:12px;color:var(--cream2);"><strong style="color:var(--gold2);">Nordic Hamstring</strong> — proven to reduce hamstring injury by up to 50%</div>
+              <div style="font-size:12px;color:var(--cream2);"><strong style="color:var(--gold2);">Hip Thrust</strong> — glute power for acceleration and tackling force</div>
+              <div style="font-size:12px;color:var(--cream2);"><strong style="color:var(--gold2);">Pull-Up Progressions</strong> — upper body pulling strength for aerial duels</div>
+              <div style="font-size:12px;color:var(--cream2);"><strong style="color:var(--gold2);">Med Ball Rotational Throws</strong> — rotational power for shooting and passing</div>
+              <div style="margin-top:14px;padding:12px;background:rgba(240,174,42,.07);border-radius:6px;border:1px solid rgba(240,174,42,.15);font-size:11px;color:var(--mist);line-height:1.6;"><strong style="color:var(--gold2);">Note for ages 12–15:</strong> Focus on bodyweight and low-load versions of all movements. Technique and neuromuscular adaptation are the goal, not load. No maximal lifting under 16.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 3 -->
+    <div id="os-p3" class="os-panel">
+      <p style="font-size:13px;color:var(--mist);margin-bottom:24px;line-height:1.75;max-width:700px;">
+        <strong style="color:var(--cream2)">Weeks 9–13 · Power & Speed.</strong> Convert strength into explosive athletic output. Sprint mechanics, change of direction, plyometric power, and repeated sprint capacity. This is where players become physically dangerous — fast off the mark, powerful in the air, and relentless for 90 minutes.
+      </p>
+      <div class="week-grid">
+        <div class="week-card reveal">
+          <div class="wc-header">
+            <div class="wc-week">Weeks 9–11</div>
+            <div class="wc-focus" style="background:rgba(240,120,64,.12);color:var(--orange2);border:1px solid rgba(240,120,64,.2);">Explosive Power</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Sprint mechanics + acceleration — 50 min<span>A-skips, B-skips, wall drives, 10m fly sprints, resistance sled pulls</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Plyometric circuit — 45 min<span>Box jumps 4×5, depth drops, lateral bounds, hurdle hops — max intent every rep</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">Power strength — 55 min<span>Jump squat 4×4, power clean (age appropriate), hip thrust explosive 4×6</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">Agility + COD — 45 min<span>T-test, L-drill, 5-10-5 shuttle, reactive agility with tennis balls</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Repeated sprint capacity — 35 min<span>12×30m at 95% effort / 30 sec rest — simulates match sprint demands</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">High-tempo SSG — 60 min<span>Apply speed in game context. 4-goal game, transition emphasis</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST + ice bath / contrast therapy</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d1">
+          <div class="wc-header">
+            <div class="wc-week">Weeks 12–13</div>
+            <div class="wc-focus" style="background:rgba(240,120,64,.12);color:var(--orange2);border:1px solid rgba(240,120,64,.2);">Speed Peak</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Max velocity sprint work — 45 min<span>Flying 30s, assisted sprints, overspeed work — pure top-end speed</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Lower body power — 50 min<span>Single-leg plyos, pistol squat progression, weighted jumps</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">Tactical ball session — 60 min<span>Full pressing patterns at full speed. Simulate in-season intensity</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">REST + mobility</div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Mixed speed-strength — 50 min<span>Sprint → strength complex: 3×(3×30m sprint + 5×jump squat) — neural activation</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">11v11 practice match — 75 min<span>Full match simulation. Evaluate where fitness is showing</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d2">
+          <div class="wc-header">
+            <div class="wc-week">Speed Benchmarks</div>
+            <div class="wc-focus" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Targets</div>
+          </div>
+          <div class="wc-body">
+            <div style="font-size:11px;font-weight:700;color:var(--mist);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">By End of Block 3</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="background:var(--ink4);border-radius:6px;padding:12px;"><div style="font-size:11px;color:var(--mist);margin-bottom:4px;">0–10m Sprint</div><div style="font-size:18px;font-weight:700;color:var(--lime);">&lt;1.80 sec</div><div style="font-size:10px;color:var(--mist2);">Elite youth target</div></div>
+              <div style="background:var(--ink4);border-radius:6px;padding:12px;"><div style="font-size:11px;color:var(--mist);margin-bottom:4px;">30m Sprint</div><div style="font-size:18px;font-weight:700;color:var(--lime);">&lt;4.10 sec</div><div style="font-size:10px;color:var(--mist2);">Winger & striker benchmark</div></div>
+              <div style="background:var(--ink4);border-radius:6px;padding:12px;"><div style="font-size:11px;color:var(--mist);margin-bottom:4px;">Vertical Jump</div><div style="font-size:18px;font-weight:700;color:var(--lime);">&gt;55 cm</div><div style="font-size:10px;color:var(--mist2);">Aerial duel capability</div></div>
+              <div style="background:var(--ink4);border-radius:6px;padding:12px;"><div style="font-size:11px;color:var(--mist);margin-bottom:4px;">Yo-Yo Level 1</div><div style="font-size:18px;font-weight:700;color:var(--lime);">Level 17+</div><div style="font-size:10px;color:var(--mist2);">Aerobic capacity benchmark</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 4 -->
+    <div id="os-p4" class="os-panel">
+      <p style="font-size:13px;color:var(--mist);margin-bottom:24px;line-height:1.75;max-width:700px;">
+        <strong style="color:var(--cream2)">Weeks 14–16 · Pre-Season Ramp.</strong> Shift from athlete to footballer. Reduce pure gym volume, increase ball work intensity. This block connects off-season conditioning to in-season demands — arriving at Week 1 of the NFSA program sharp, fit, and ready to compete immediately.
+      </p>
+      <div class="week-grid">
+        <div class="week-card reveal">
+          <div class="wc-header">
+            <div class="wc-week">Week 14</div>
+            <div class="wc-focus" style="background:rgba(106,79,181,.12);color:#9B85E8;border:1px solid rgba(106,79,181,.2);">Bridge Week</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Maintenance strength — 45 min<span>Full body, moderate load — maintain, don't build. Energy management begins.</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">High-intensity ball work — 60 min<span>Rondo, 1v1 corridors, shooting circuit. Match tempo throughout</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">Sprint + agility — 35 min<span>Short, sharp. Maintain sharpness without fatigue accumulation</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">REST + mental prep session<span>Visualization, goal setting, team bonding activity</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Tactical shape work — 60 min<span>Review pressing triggers, set play walk-throughs, 4-3-3 shape refresher</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">Practice match — 80 min<span>Full 11v11. Evaluate fitness carry-over from off-season</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d1">
+          <div class="wc-header">
+            <div class="wc-week">Weeks 15–16</div>
+            <div class="wc-focus" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Launch Ready</div>
+          </div>
+          <div class="wc-body">
+            <div class="wc-day"><div class="wc-day-label">MON</div><div class="wc-day-content">Full NFSA session preview — 2 hrs<span>Run Session A from the in-season program. Test readiness.</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">TUE</div><div class="wc-day-content">Activation + sprint work — 40 min<span>CNS activation, 6×20m build-ups, reaction starts</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">WED</div><div class="wc-day-content">REST — mental sharpness day<span>Light reading, visualization, no physical load</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">THU</div><div class="wc-day-content">Position group training — 60 min<span>Each position runs their group-specific block</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">FRI</div><div class="wc-day-content">Light technical session — 45 min<span>Touch, feel, confidence. No heavy load 48 hrs before match</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SAT</div><div class="wc-day-content">SEASON OPENER / MATCH<span>Players arrive at Week 1 in the best shape of their lives</span></div></div>
+            <div class="wc-day"><div class="wc-day-label">SUN</div><div class="wc-day-content">REST — begin in-season program</div></div>
+          </div>
+        </div>
+        <div class="week-card reveal d2" style="background:rgba(24,184,114,.06);border-color:rgba(24,184,114,.2);">
+          <div class="wc-header" style="border-color:rgba(24,184,114,.12);">
+            <div class="wc-week">Season Launch Checklist</div>
+            <div class="wc-focus" style="background:rgba(24,184,114,.15);color:var(--lime);border:1px solid rgba(24,184,114,.3);">Ready?</div>
+          </div>
+          <div class="wc-body">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Resting HR at or below pre-season baseline</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">0–10m sprint time at Block 3 target or better</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">No outstanding soft tissue issues or soreness</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Tactical shape and pressing triggers reviewed</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Set plays walked through with full squad</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Mental goals set — individual and team</div></div>
+              <div style="display:flex;gap:10px;"><span style="color:var(--lime);font-weight:700;font-size:14px;">✓</span><div style="font-size:12.5px;color:var(--cream2);">Players motivated, hungry, and ready to compete</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout Reference Table -->
+  <div style="margin-top:72px;">
+    <div class="section-tag reveal">Individual vs Team</div>
+    <h3 style="font-size:clamp(22px,2.8vw,34px);font-weight:800;color:var(--cream);margin-bottom:8px;letter-spacing:-0.5px;" class="reveal d1">Train alone or with your team — both tracks included</h3>
+
+    <div class="toggle-wrap reveal d2" id="toggleWrap">
+      <span class="toggle-label active" id="lbl-ind">Individual</span>
+      <div class="toggle-switch" id="togSwitch" onclick="toggleTrack()">
+        <div class="toggle-knob"></div>
+      </div>
+      <span class="toggle-label" id="lbl-team">Team</span>
+    </div>
+
+    <div id="track-individual">
+      <table class="workout-table">
+        <thead><tr><th>Code</th><th>Exercise</th><th>Sets × Reps</th><th>Focus</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>S-01</td><td>Trap Bar Deadlift</td><td>4 × 5–6</td><td><span class="wt-tag" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Strength</span></td><td>Posterior chain. Add 5% each week in Block 2. Technique over load always.</td></tr>
+          <tr><td>S-02</td><td>Bulgarian Split Squat</td><td>3 × 8/leg</td><td><span class="wt-tag" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Strength</span></td><td>Single-leg power. Control descent, explosive drive up. No knee caving.</td></tr>
+          <tr><td>S-03</td><td>Nordic Hamstring Curl</td><td>3 × 4–6</td><td><span class="wt-tag" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Injury Prev.</span></td><td>Most important exercise for any soccer player. Partner holds ankles. Slow eccentric.</td></tr>
+          <tr><td>P-01</td><td>Box Jump (Max Height)</td><td>4 × 4</td><td><span class="wt-tag" style="background:rgba(240,120,64,.12);color:var(--orange2);border:1px solid rgba(240,120,64,.2);">Power</span></td><td>Full intent every rep. 60-90 sec rest between sets. Step down — don't jump down.</td></tr>
+          <tr><td>P-02</td><td>Hip Thrust (Barbell)</td><td>4 × 8</td><td><span class="wt-tag" style="background:rgba(240,120,64,.12);color:var(--orange2);border:1px solid rgba(240,120,64,.2);">Power</span></td><td>Glute activation for sprint acceleration. Drive hips fully extended. Pause at top.</td></tr>
+          <tr><td>P-03</td><td>Med Ball Rotational Throw</td><td>3 × 8/side</td><td><span class="wt-tag" style="background:rgba(240,120,64,.12);color:var(--orange2);border:1px solid rgba(240,120,64,.2);">Power</span></td><td>Wall or partner. Max velocity rotation. Directly transfers to shooting and passing power.</td></tr>
+          <tr><td>SP-01</td><td>10m Acceleration Sprint</td><td>8 × 10m</td><td><span class="wt-tag" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Speed</span></td><td>3-point start. Full rest between reps (90 sec). Only do when fully fresh.</td></tr>
+          <tr><td>SP-02</td><td>Flying 30m Sprint</td><td>5 × 30m</td><td><span class="wt-tag" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Speed</span></td><td>30m build-up then full sprint through. Trains max velocity — the phase after acceleration.</td></tr>
+          <tr><td>C-01</td><td>Yo-Yo Intermittent Test</td><td>Weekly</td><td><span class="wt-tag" style="background:rgba(90,158,232,.12);color:var(--blue2);border:1px solid rgba(90,158,232,.2);">Cardio</span></td><td>Track level weekly. Target: Level 17+ by end of Block 3. Benchmark progress honestly.</td></tr>
+          <tr><td>M-01</td><td>Visualization Session</td><td>10 min daily</td><td><span class="wt-tag" style="background:rgba(106,79,181,.12);color:#9B85E8;border:1px solid rgba(106,79,181,.2);">Mental</span></td><td>Eyes closed. Picture performing your position-specific skills at max quality. Morning or pre-sleep.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="track-team" style="display:none;">
+      <table class="workout-table">
+        <thead><tr><th>Session</th><th>Activity</th><th>Duration</th><th>Type</th><th>Coaching Notes</th></tr></thead>
+        <tbody>
+          <tr><td>T-01</td><td>Team Conditioning Circuit</td><td>45 min</td><td><span class="wt-tag" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Fitness</span></td><td>5 stations, 4 players each. Sled push, ball carry sprint, jump squat, battle ropes, ladder. Rotate every 3 min. Competitive — post scores publicly.</td></tr>
+          <tr><td>T-02</td><td>Team Sprint Relay</td><td>30 min</td><td><span class="wt-tag" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Speed</span></td><td>4 teams of 4. 4×60m relay. Creates competitive intensity. Winning team gets advantage in the SSG that follows.</td></tr>
+          <tr><td>T-03</td><td>Possession Fitness (Rondo)</td><td>25 min</td><td><span class="wt-tag" style="background:rgba(90,158,232,.12);color:var(--blue2);border:1px solid rgba(90,158,232,.2);">Cardio + Ball</span></td><td>6v3 rondo in tight space. Defenders sprint out when they win the ball. Naturally creates high-intensity intervals within a ball context. Disguised fitness.</td></tr>
+          <tr><td>T-04</td><td>Position Group Strength Day</td><td>60 min</td><td><span class="wt-tag" style="background:rgba(184,48,48,.12);color:var(--red2);border:1px solid rgba(184,48,48,.2);">Strength</span></td><td>Split team by position group. CBs/FBs do lower body heavy. Midfielders do full body moderate. Wingers/strikers do power + speed focus.</td></tr>
+          <tr><td>T-05</td><td>High-Intensity SSG Battery</td><td>50 min</td><td><span class="wt-tag" style="background:rgba(240,120,64,.12);color:var(--orange2);border:1px solid rgba(240,120,64,.2);">Match Intensity</span></td><td>4 × 8-min SSGs (5v5) with 2-min rests. No walking on the pitch. Any player not sprinting on transition gets 5 burpees. Creates match-speed habits.</td></tr>
+          <tr><td>T-06</td><td>Team Yoga / Mobility</td><td>40 min</td><td><span class="wt-tag" style="background:rgba(106,79,181,.12);color:#9B85E8;border:1px solid rgba(106,79,181,.2);">Recovery</span></td><td>Full team recovery session. Led by coach or specialist. Creates culture of recovery alongside intensity. Builds trust that the program cares about players' bodies.</td></tr>
+          <tr><td>T-07</td><td>Mental Skills Circle</td><td>20 min</td><td><span class="wt-tag" style="background:rgba(106,79,181,.12);color:#9B85E8;border:1px solid rgba(106,79,181,.2);">Mental</span></td><td>Monthly team circle. Each player shares: one thing going well, one goal, one challenge. Coach listens 80%. Builds psychological safety and team identity.</td></tr>
+          <tr><td>T-08</td><td>Pre-Season Practice Match</td><td>90 min</td><td><span class="wt-tag" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Integration</span></td><td>Apply all off-season fitness in match context. Coach evaluates pressing trigger execution, position group performance, and overall fitness level.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mental Performance -->
+  <div style="margin-top:72px;">
+    <div class="section-tag reveal">Mental Performance</div>
+    <h3 style="font-size:clamp(22px,2.8vw,34px);font-weight:800;color:var(--cream);margin-bottom:8px;letter-spacing:-0.5px;" class="reveal d1">The mental edge is trained — not inherited</h3>
+    <p class="body-text reveal d2" style="margin-bottom:0;">Physical fitness without mental resilience creates players who perform in training and disappear in matches. This system trains both.</p>
+    <div class="mental-grid">
+      <div class="mental-card reveal">
+        <div class="mc-icon">🎯</div>
+        <div class="mc-title">Visualization Protocol</div>
+        <div class="mc-text">10 minutes daily, eyes closed. Players mentally rehearse their position-specific skills at perfect quality. Research shows mental rehearsal activates the same neural pathways as physical practice. Do this every morning during the off-season.</div>
+      </div>
+      <div class="mental-card reveal d1">
+        <div class="mc-icon">😤</div>
+        <div class="mc-title">Pressure Inoculation</div>
+        <div class="mc-text">Drills designed to be performed under accumulated fatigue — simulating the mental pressure of the 80th minute. Finishing sessions always end with a shooting challenge when players are already tired. Train what you'll feel in the match.</div>
+      </div>
+      <div class="mental-card reveal d2">
+        <div class="mc-icon">💬</div>
+        <div class="mc-title">Identity Language</div>
+        <div class="mc-text">Coaches use specific language to build identity. "We press immediately." "We win our 1v1s." "We play forward first." Repeated consistently, these become automatic beliefs that drive behavior under pressure without thinking.</div>
+      </div>
+      <div class="mental-card reveal d3">
+        <div class="mc-icon">📓</div>
+        <div class="mc-title">Performance Journaling</div>
+        <div class="mc-text">Weekly journal entries for each player: What did I do well this week? What do I want to improve? What is my goal next week? Takes 5 minutes. Builds self-awareness, ownership, and a measurable improvement mindset.</div>
+      </div>
+      <div class="mental-card reveal d4">
+        <div class="mc-icon">🛌</div>
+        <div class="mc-title">Sleep Optimization</div>
+        <div class="mc-text">Sleep is the single biggest performance variable for ages 12–19. Target 8–9 hours. Coaches communicate sleep expectations to families. Athletes who sleep well adapt faster, recover faster, and make better decisions in-game.</div>
+      </div>
+      <div class="mental-card reveal d5">
+        <div class="mc-icon">🔥</div>
+        <div class="mc-title">Resilience Reframing</div>
+        <div class="mc-text">After every mistake in training: players say out loud what they should have done instead. Eliminates lingering on errors and builds a growth mindset. Coaches never repeat negative feedback — replace with correct behavior reinforcement immediately.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nutrition -->
+  <div class="nutrition-block reveal">
+    <div class="nb-icon">🥗</div>
+    <div>
+      <div class="nb-title">Nutrition & Fueling Guidelines — Included</div>
+      <div class="nb-text">The off-season plan includes a complete youth athlete nutrition framework. Carbohydrate timing for training days vs rest days. Protein targets by body weight (ages 12–19). Pre-match meal protocols. Hydration benchmarks. Recovery nutrition windows. The food decisions players make off the pitch are as important as what they do on it.</div>
+      <div class="nb-pills">
+        <span class="nb-pill">Pre-Training Fueling</span>
+        <span class="nb-pill">Post-Training Recovery</span>
+        <span class="nb-pill">Rest Day Eating</span>
+        <span class="nb-pill">Match Day Protocol</span>
+        <span class="nb-pill">Hydration Standards</span>
+        <span class="nb-pill">Youth-Specific Targets</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DIVIDER ───────────────────────────────────────────── -->
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     FEATURES BENTO
+═══════════════════════════════════════════════════════ -->
+<section id="features">
+  <div class="section-tag reveal">Complete Program</div>
+  <h2 class="h2 reveal d1">Everything in<br>one <em>system.</em></h2>
+  <p class="body-text reveal d2">In-season program. Off-season plan. Tactical playbook. Position groups. GK curriculum. Set plays. Mental training. Nutrition. It's all here.</p>
+
+  <div class="features-bento">
+    <div class="fb fb-1 reveal" data-ghost="CAL">
+      <div class="fb-accent" style="background:var(--lime);"></div>
+      <div class="fb-icon">📅</div>
+      <div class="fb-title">24-Week In-Season Calendar</div>
+      <div class="fb-desc">Foundation → Technical → Tactical → Intensity → Integration → Peak. Every session planned, every week intentional.</div>
+    </div>
+    <div class="fb fb-2 reveal d1" data-ghost="FIT">
+      <div class="fb-accent" style="background:var(--gold2);"></div>
+      <div class="fb-icon">💪</div>
+      <div class="fb-title">16-Week Off-Season Plan</div>
+      <div class="fb-desc">Recovery, strength, power, speed, and pre-season ramp. Individual and team tracks. Nutrition and mental performance included.</div>
+    </div>
+    <div class="fb fb-3 reveal d2" data-ghost="90+">
+      <div class="fb-accent" style="background:var(--red2);"></div>
+      <div class="fb-stat">90+</div>
+      <div class="fb-title">Original Drills</div>
+      <div class="fb-desc">Every drill labeled by focus, with setup diagrams and coaching points.</div>
+    </div>
+    <div class="fb fb-4 reveal" data-ghost="NFL">
+      <div class="fb-accent" style="background:var(--red2);"></div>
+      <div class="fb-icon">🏈</div>
+      <div class="fb-title">4 NFL-Inspired Pressing Systems</div>
+      <div class="fb-desc">Gegenpress (Zone Blitz), 4-4-2 Mid-Block (Tampa 2), Man-Oriented Press (Man Coverage), and Trap Press (Cover 0). Every press system has a trigger word, execution pattern, and drill progression.</div>
+    </div>
+    <div class="fb fb-5 reveal d1" data-ghost="POS">
+      <div class="fb-accent" style="background:var(--blue2);"></div>
+      <div class="fb-icon">🛡️</div>
+      <div class="fb-title">6 Position Group Programs</div>
+      <div class="fb-desc">CBs, fullbacks, DMs, CMs, wingers, strikers — each with dedicated weekly training blocks. Plus full GK curriculum. This is the NFL model applied to soccer.</div>
+    </div>
+    <div class="fb fb-6 reveal" data-ghost="SET">
+      <div class="fb-accent" style="background:var(--gold2);"></div>
+      <div class="fb-icon">⚽</div>
+      <div class="fb-title">Complete Set Play Library — Named & Rehearsed</div>
+      <div class="fb-desc">ALPHA, BETA, GAMMA corners. DELTA, EPSILON, ZETA free kicks. Throw-in patterns and kickoff designs. Every dead-ball situation in your game is covered, named, and practiced. When the referee blows the whistle, your team already knows exactly what happens next.</div>
+    </div>
+    <div class="fb fb-7 reveal d2" data-ghost="GK">
+      <div class="fb-accent" style="background:var(--orange2);"></div>
+      <div class="fb-icon">🧤</div>
+      <div class="fb-title">Full GK Curriculum</div>
+      <div class="fb-desc">Sweeper-keeper model. Distribution, shot-stopping, 1v1s, and live press play-out.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SET PLAYS BAR ─────────────────────────────────────── -->
+<div class="setplays-bar">
+  <div>
+    <div class="sp-title">Named Set Plays — Ready to Call, Ready to Execute</div>
+    <div class="sp-text">Every dead-ball situation has a name, a shape, and a rehearsed outcome. Your players will know exactly what happens the moment you call the play — before the kick is even taken.</div>
+  </div>
+  <div class="sp-plays">
+    <span class="sp-play">ALPHA</span>
+    <span class="sp-play">BETA</span>
+    <span class="sp-play">GAMMA</span>
+    <span class="sp-play">DELTA</span>
+    <span class="sp-play">EPSILON</span>
+    <span class="sp-play">ZETA</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PRESSING
+═══════════════════════════════════════════════════════ -->
+<section id="pressing">
+  <div class="section-tag reveal">Defensive DNA</div>
+  <h2 class="h2 reveal d1">Press like<br>the <em>NFL.</em></h2>
+  <p class="body-text reveal d2">Four complete pressing systems, each with a trigger, an execution pattern, and a progressive drill program. Built on the same defensive frameworks that NFL coordinators spend careers designing.</p>
+  <div class="press-grid">
+    <div class="pc reveal" style="--pc-col:#E05555;" data-n="01">
+      <div class="pc-nfl">NFL: Zone Blitz</div>
+      <div class="pc-title">Gegenpress<br>Counter-Press</div>
+      <div class="pc-desc">3 nearest players collapse in a triangle on the ball-carrier within 2 seconds of any turnover. Block all escape routes simultaneously. The most dangerous transition moments become your most reliable attacking opportunities.</div>
+      <div class="pc-trigger"><strong>Trigger word: "PRESS!"</strong> — Any turnover in attacking or middle third</div>
+    </div>
+    <div class="pc reveal d1" style="--pc-col:#5A9FE8;" data-n="02">
+      <div class="pc-nfl">NFL: Tampa 2</div>
+      <div class="pc-title">4-4-2<br>Mid-Block</div>
+      <div class="pc-desc">Two compact banks of four slide collectively toward the ball. Strikers cut the central pass to the DM. Force the wide pass, then spring a coordinated double-team trap on the receiving fullback. Controlled, zonal, suffocating.</div>
+      <div class="pc-trigger"><strong>Trigger word: "HOLD!"</strong> — Opponent building slowly from the back</div>
+    </div>
+    <div class="pc reveal" style="--pc-col:#9B85E8;" data-n="03">
+      <div class="pc-nfl">NFL: Man Coverage</div>
+      <div class="pc-title">Man-Oriented<br>High Press</div>
+      <div class="pc-desc">Each outfield player is assigned one opponent to shadow and press. Every passing option is blanketed simultaneously. Maximum collective pressure — no outlet, no time, no comfort. High risk, devastating when fit enough to execute.</div>
+      <div class="pc-trigger"><strong>Trigger: Coach signals</strong> — Used Month 4+ only. Requires peak fitness.</div>
+    </div>
+    <div class="pc reveal d1" style="--pc-col:#F0AE2A;" data-n="04">
+      <div class="pc-nfl">NFL: Cover 0 Overload</div>
+      <div class="pc-title">Trap Press<br>Ambush</div>
+      <div class="pc-desc">Deliberately open one side to invite the pass, then spring a 3-player overload ambush. The opponent finds what looks like space — and walks into a designed trap. This is championship-level defensive intelligence.</div>
+      <div class="pc-trigger"><strong>Trigger word: "TRAP!"</strong> — Protecting a lead or forcing a goal late</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     POSITIONS
+═══════════════════════════════════════════════════════ -->
+<section id="positions">
+  <div class="section-tag reveal">NFL-Style Position Groups</div>
+  <h2 class="h2 reveal d1">Train for<br>your <em>position.</em></h2>
+  <p class="body-text reveal d2">Every position has different demands. Every position deserves a different program. Generalist training produces generalist players — and elite teams can't afford generalists.</p>
+
+  <div class="pos-tabs">
+    <div class="pos-tab active" onclick="switchPos('cb',this)">⚔️ CBs</div>
+    <div class="pos-tab" onclick="switchPos('fb',this)">⚡ Fullbacks</div>
+    <div class="pos-tab" onclick="switchPos('dm',this)">🔭 DM</div>
+    <div class="pos-tab" onclick="switchPos('cm',this)">🔄 CMs</div>
+    <div class="pos-tab" onclick="switchPos('w',this)">🏃 Wingers</div>
+    <div class="pos-tab" onclick="switchPos('st',this)">🎯 Strikers</div>
+  </div>
+
+  <div id="pos-cb" class="pos-panel active">
+    <div>
+      <div class="pos-title">Center<br>Backs</div>
+      <div class="pos-sub">The defensive foundation. Aerial dominance, calm distribution under pressure, and commanding box leadership. A great CB prevents goals before they're ever attempted.</div>
+      <div class="pos-attrs">
+        <span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Aerial Dominance</span>
+        <span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Ball Distribution</span>
+        <span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">1v1 Defending</span>
+        <span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Communication</span>
+        <span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Positioning</span>
+      </div>
+    </div>
+    <div class="pos-drills">
+      <div class="pos-drill"><div class="pd-num">01</div><div><div class="pd-name">Aerial Dominance Circuit</div><div class="pd-desc">Attack every cross before the striker. Headed clearances, box positioning, and physical competition for high balls. Win every aerial duel by claiming space before the opponent moves.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">02</div><div><div class="pd-name">Distribution Under Press</div><div class="pd-desc">Receive from GK with a runner pressing immediately. Play accurately to FB or switch to far CB in 1-2 touches. Build composure that never cracks under real match pressure.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">03</div><div><div class="pd-name">1v1 Defending (Attacker Drives)</div><div class="pd-desc">Set the stance, jockey, delay, then time the tackle or force wide. Never ball-watch. Stay between attacker and goal. Patience used as a weapon.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">04</div><div><div class="pd-name">Ball-Playing CB Circuit</div><div class="pd-desc">Drive with the ball, find the DM, switch play, and play vertical passes through lines under increasing pressure. The modern CB is the 12th midfielder.</div></div></div>
+    </div>
+  </div>
+  <div id="pos-fb" class="pos-panel">
+    <div>
+      <div class="pos-title">Full<br>backs</div>
+      <div class="pos-sub">The engine on both sides of the pitch. Attack like a winger, defend like a CB. The most physically demanding role in the modern game demands a specialist program.</div>
+      <div class="pos-attrs"><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Overlap Timing</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Crossing Delivery</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Recovery Runs</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">1v1 Containing</span></div>
+    </div>
+    <div class="pos-drills">
+      <div class="pos-drill"><div class="pd-num">01</div><div><div class="pd-name">Overlap Sprint Timing</div><div class="pd-desc">CM plays wide, FB sprints past winger to receive the overlap. Must arrive before the defender recovers. Cross or shoot. Every rep timed.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">02</div><div><div class="pd-name">1v1 Containment</div><div class="pd-desc">Delay. Show inside. Time the challenge. Contain first, steal second. Win by positioning — not desperation.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">03</div><div><div class="pd-name">3-Type Crossing Delivery</div><div class="pd-desc">Near post drive, far post curl, low pullback. 3-touch limit. Quality of delivery judged — not quantity.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">04</div><div><div class="pd-name">Diagonal Recovery Run</div><div class="pd-desc">Pushed forward — ball switches sides — sprint 40 yards diagonally back before winger receives. The fitness test disguised as a tactical drill.</div></div></div>
+    </div>
+  </div>
+  <div id="pos-dm" class="pos-panel">
+    <div>
+      <div class="pos-title">Defensive<br>Mid</div>
+      <div class="pos-sub">The heartbeat of the team. Scan everything. Intercept before others react. Distribute with one touch. Press-resistant, intelligent, and always available.</div>
+      <div class="pos-attrs"><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">360° Scanning</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Interceptions</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Press Resistance</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Long Switch Pass</span></div>
+    </div>
+    <div class="pos-drills">
+      <div class="pos-drill"><div class="pd-num">01</div><div><div class="pd-name">360° Scanning Drill</div><div class="pd-desc">Coach shows direction cards while DM receives passes. Must call the card before passing on. Trains pre-scanning as a muscle memory habit — not a conscious effort.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">02</div><div><div class="pd-name">Interception Positioning</div><div class="pd-desc">Read the pass before it happens. Position BEFORE the ball is played — not react after. Interceptions won through intelligence, not athleticism.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">03</div><div><div class="pd-name">Press Resistance Rondo 3v1</div><div class="pd-desc">Three players press immediately on every touch. DM controls, turns, finds the right pass within 1.5 seconds. Maximum pressure. 90-second rep.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">04</div><div><div class="pd-name">Long Switch Distribution</div><div class="pd-desc">Receive under pressure, switch play to isolated wide player in 2 touches. Both feet. Driven — not floated. Pin-point at pace, every time.</div></div></div>
+    </div>
+  </div>
+  <div id="pos-cm" class="pos-panel">
+    <div>
+      <div class="pos-title">Central<br>Mids</div>
+      <div class="pos-sub">Box-to-box engines. Read play two passes ahead. Arrive late in the box. Link defense to attack in one touch. The most complete athletes on the pitch.</div>
+      <div class="pos-attrs"><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Third Man Runs</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Box Arrival</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Combination Play</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Engine</span></div>
+    </div>
+    <div class="pos-drills">
+      <div class="pos-drill"><div class="pd-num">01</div><div><div class="pd-name">Third Man Run Circuit</div><div class="pd-desc">P1→P2, P2 lays to CM who drives forward into the box for a shot. Read the game 2 passes ahead. Intelligence + fitness in one drill.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">02</div><div><div class="pd-name">Box-to-Box Shuttle Passing</div><div class="pd-desc">Two CMs pass through center, box to box — 60-yard runs with ball ending in a shot on goal. The engine test disguised as a technical drill.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">03</div><div><div class="pd-name">1-2-3 Combination Patterns</div><div class="pd-desc">CM + winger + striker in rotating patterns at the edge of the box ending in driven shots. Executed at full match tempo — no slowing down.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">04</div><div><div class="pd-name">Late Box Run</div><div class="pd-desc">Winger receives wide, CM begins blind-side run. Winger delivers at the precise moment. CM finishes first time. It's about timing — not raw speed.</div></div></div>
+    </div>
+  </div>
+  <div id="pos-w" class="pos-panel">
+    <div>
+      <div class="pos-title">Wing<br>ers</div>
+      <div class="pos-sub">Beat your man. That's the job. Receive in space, face up the defender, and go. This program turns technically capable wingers into game-breakers that scouts actively track.</div>
+      <div class="pos-attrs"><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">1v1 Dribbling</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Speed with Ball</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Crossing & Cutting</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Explosive First Step</span></div>
+    </div>
+    <div class="pos-drills">
+      <div class="pos-drill"><div class="pd-num">01</div><div><div class="pd-name">Speed Dribbling Gates</div><div class="pd-desc">Control the ball at speed through cone gates at 5, 10, 15, and 20 yards. Target: 20 yards with ball in under 4 seconds. Develops ball control at elite pace.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">02</div><div><div class="pd-name">1v1 Attack Sequence — 8 Min</div><div class="pd-desc">8 minutes of consecutive 1v1s — new defender every 60 seconds. Win the duel then cross. Repetition builds 1v1 muscle memory that no defender can disrupt.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">03</div><div><div class="pd-name">Two-Weapon Winger Training</div><div class="pd-desc">Receive, play 1-2, then choose: drive and cross OR cut inside and shoot. Defenders can't know which. Both options equally trained, equally dangerous.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">04</div><div><div class="pd-name">Explosive First Step</div><div class="pd-desc">Light resistance band on first touch. Explode away against resistance — simulates shaking a tight defender. Develops pure acceleration from a standing start.</div></div></div>
+    </div>
+  </div>
+  <div id="pos-st" class="pos-panel">
+    <div>
+      <div class="pos-title">Strik<br>ers</div>
+      <div class="pos-sub">Score goals. Hold the ball. Press from the front. Lead the line. Strikers in this program finish chances, create for others, and terrify defensive lines from minute one.</div>
+      <div class="pos-attrs"><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Finishing</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Hold-Up Play</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Movement Patterns</span><span class="pos-attr" style="background:rgba(24,184,114,.1);color:var(--lime);border:1px solid rgba(24,184,114,.2);">Press from Front</span></div>
+    </div>
+    <div class="pos-drills">
+      <div class="pos-drill"><div class="pd-num">01</div><div><div class="pd-name">Finishing Across 6 Zones</div><div class="pd-desc">6 positions in and around the box. 3 shots from each = 18 per rep. Track success by zone. Improve the weakest zone each week. No comfort zones allowed.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">02</div><div><div class="pd-name">Hold-Up Under Pressure</div><div class="pd-desc">Ball to back, defender presses immediately. Control, hold, and lay off in under 3 seconds. Use the body as a shield. The skill that separates good strikers from great ones.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">03</div><div><div class="pd-name">Movement Pattern Training</div><div class="pd-desc">Coach calls: NEAR / FAR / DROP / SPIN — striker executes the run, ball delivered immediately. Train the movement vocabulary every elite striker must own.</div></div></div>
+      <div class="pos-drill"><div class="pd-num">04</div><div><div class="pd-name">Press from Front — Engine Test</div><div class="pd-desc">Sprint 40 yards to close GK/CB, force a hasty clearance, recover, repeat. 90-second count. Strikers who press from the front win games their team shouldn't.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     PROOF
+═══════════════════════════════════════════════════════ -->
+<section id="proof">
+  <div class="section-tag reveal" style="justify-content:center;">Built to Work</div>
+  <p class="proof-pull reveal">
+    "This isn't a drill library.<br>It's a <em>complete development system</em> —<br>built to produce elite players, year after year."
+  </p>
+  <div class="proof-cards">
+    <div class="proof-card reveal"><div class="proof-icon">🏆</div><div class="proof-title">Elite Club Methodology</div><div class="proof-text">The 6-phase periodization mirrors what top academies use. Progressive load, intentional tapering, and planned recovery — not random sessions cobbled together.</div></div>
+    <div class="proof-card reveal d1"><div class="proof-icon">🧬</div><div class="proof-title">Sports Science Foundation</div><div class="proof-text">Progressive overload, recovery periodization, and position-specific training are all backed by decades of elite sport research. The off-season plan reflects how professional clubs actually build and maintain athletes.</div></div>
+    <div class="proof-card reveal d2"><div class="proof-icon">🏈</div><div class="proof-title">NFL Defensive Intelligence</div><div class="proof-text">American football's most sophisticated defensive schemes — zone blitz, man coverage, cover 0 traps — translated into soccer pressing systems that opponents have never been coached to read.</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     PRICING
+═══════════════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="section-tag reveal">Packages & Pricing</div>
+  <h2 class="h2 reveal d1">Choose your<br><em>level.</em></h2>
+  <p class="body-text reveal d2">Every package includes both the 6-month in-season program and the complete 16-week off-season fitness plan. You're not buying a session — you're buying a full year of elite development.</p>
+
+  <div class="pricing-grid">
+    <!-- Individual Player -->
+    <div class="price-card reveal">
+      <div class="pt">Individual Player</div>
+      <div class="pn">Player Access</div>
+      <div class="pd">For serious players and their families. Everything you need to train with intent year-round — both in-season and off-season.</div>
+      <div class="pp"><sup>$</sup>249</div>
+      <div class="pp-per">one-time · full 12-month system</div>
+      <div class="p-div"></div>
+      <div class="p-feats">
+        <div class="p-feat">Complete 24-week in-season calendar</div>
+        <div class="p-feat">16-week off-season fitness plan</div>
+        <div class="p-feat">90+ drill library with diagrams</div>
+        <div class="p-feat">Your position group program</div>
+        <div class="p-feat">Mental performance framework</div>
+        <div class="p-feat">Nutrition & fueling guidelines</div>
+        <div class="p-feat">Set plays & tactical playbook</div>
+        <div class="p-feat no">Coach licensing rights</div>
+        <div class="p-feat no">Team or group deployment</div>
+      </div>
+      <a href="mailto:NFSA@eliteraiderssoccer.com?subject=Player Access - Elite Raiders Soccer" class="btn-po btn-po-out">Get Player Access</a>
+    </div>
+
+    <!-- Coach — featured -->
+    <div class="price-card hot reveal d1">
+      <div class="pt">Coach / Club</div>
+      <div class="pn">Coach License</div>
+      <div class="pd">Run the full year-round system with your team. Full coaching and deployment rights for one club or program — up to 35 players.</div>
+      <div class="pp"><sup>$</sup>799</div>
+      <div class="pp-per">per season · up to 35 players</div>
+      <div class="p-div"></div>
+      <div class="p-feats">
+        <div class="p-feat">Everything in Player Access</div>
+        <div class="p-feat">All 6 position group programs</div>
+        <div class="p-feat">Full GK curriculum</div>
+        <div class="p-feat">All 4 pressing system guides</div>
+        <div class="p-feat">Complete set play library (6 plays)</div>
+        <div class="p-feat">Team off-season training plan</div>
+        <div class="p-feat">Session planning templates</div>
+        <div class="p-feat">Strength reference table + benchmarks</div>
+        <div class="p-feat no">Custom branding</div>
+      </div>
+      <a href="mailto:NFSA@eliteraiderssoccer.com?subject=Coach License - Elite Raiders Soccer" class="btn-po btn-po-fill">Get Coach License</a>
+    </div>
+
+    <!-- Academy -->
+    <div class="price-card reveal d2">
+      <div class="pt">Academy / Organization</div>
+      <div class="pn">Academy License</div>
+      <div class="pd">Full organizational deployment. Your brand, your coaches, your curriculum — powered by the NFSA system across all age groups.</div>
+      <div class="pp"><sup>$</sup>3,499</div>
+      <div class="pp-per">annual · unlimited coaches & players</div>
+      <div class="p-div"></div>
+      <div class="p-feats">
+        <div class="p-feat">Everything in Coach License</div>
+        <div class="p-feat">Unlimited coaches & teams</div>
+        <div class="p-feat">Custom-branded program materials</div>
+        <div class="p-feat">Multi-age curriculum adaptation</div>
+        <div class="p-feat">Rights to deploy across all squads</div>
+        <div class="p-feat">Quarterly curriculum updates</div>
+        <div class="p-feat">Direct contact with Nana Frimpong Sintim-Aboagye</div>
+        <div class="p-feat">Early access to new content drops</div>
+      </div>
+      <a href="mailto:NFSA@eliteraiderssoccer.com?subject=Academy License - Elite Raiders Soccer" class="btn-po btn-po-gold">Contact for Academy</a>
+    </div>
+  </div>
+
+  <div class="compare-note reveal">
+    All packages include both the <strong>6-month in-season program</strong> and the <strong>16-week off-season conditioning plan</strong>.<br>
+    Original intellectual property of <strong>Nana Frimpong Sintim-Aboagye</strong> · © 2026 · Protected under Berne Convention & U.S. Copyright Law
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════════════════════ -->
+<section id="cta">
+  <div class="cta-inner">
+    <h2 class="cta-h">READY TO<br>BUILD<br>GREATNESS?</h2>
+    <p class="cta-sub">12 months. Two programs. One complete system. The only question is whether your players are going to build in the off-season — or fall behind.</p>
+    <a href="mailto:NFSA@eliteraiderssoccer.com?subject=Get Started - Elite Raiders Soccer" class="cta-btn">
+      Start Today
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.75 9h10.5M9.75 4.5l4.5 4.5-4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <div class="cta-note">© 2026 Nana Frimpong Sintim-Aboagye · Elite Raiders Soccer · All Rights Reserved · Protected Intellectual Property</div>
+    <div style="margin-top:14px;display:flex;gap:20px;justify-content:center;align-items:center;flex-wrap:wrap;">
+      <a href="mailto:NFSA@eliteraiderssoccer.com" style="color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">✉ NFSA@eliteraiderssoccer.com</a>
+      <span style="color:rgba(255,255,255,.2);font-size:12px;">·</span>
+      <a href="tel:+13318030897" style="color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">📞 (331) 803-0897</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-row">
+    <div>
+      <div class="footer-brand">ELITE RAIDERS <span>SOCCER</span></div>
+      <div class="footer-by">by Nana Frimpong Sintim-Aboagye · EIN Registered</div>
+    </div>
+    <div class="footer-copy">
+      © 2026 Nana Frimpong Sintim-Aboagye · Elite Raiders Soccer. All Rights Reserved. This program and all its contents are original intellectual property protected under the Berne Convention and U.S. Copyright Law (17 U.S.C.). Unauthorized reproduction or distribution is strictly prohibited.<br><br>
+      <span style="color:rgba(255,255,255,.4);">
+        <a href="tel:+13318030897" style="color:rgba(255,255,255,.45);text-decoration:none;">(331) 803-0897</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:NFSA@eliteraiderssoccer.com" style="color:rgba(255,255,255,.45);text-decoration:none;">NFSA@eliteraiderssoccer.com</a>
+      </span>
+    </div>
+    <div class="footer-links">
+      <a href="#offseason">Off-Season</a>
+      <a href="#features">Program</a>
+      <a href="#pressing">Tactics</a>
+      <a href="#positions">Positions</a>
+      <a href="#pricing">Pricing</a>
+      <a href="mailto:NFSA@eliteraiderssoccer.com">Email Us</a>
+      <a href="tel:+13318030897">(331) 803-0897</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ─────────────────────────────────────────────────
+const cur = document.getElementById('cur');
+const curR = document.getElementById('cur-r');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  curR.style.left = e.clientX + 'px';
+  curR.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,.os-tab,.pos-tab,.week-card,.price-card,.fp-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='14px'; cur.style.height='14px'; curR.style.width='54px'; curR.style.height='54px'; curR.style.borderColor='rgba(24,184,114,.65)'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='10px'; cur.style.height='10px'; curR.style.width='40px'; curR.style.height='40px'; curR.style.borderColor='rgba(24,184,114,.35)'; });
+});
+
+// ── SCROLL REVEAL ───────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── OFF-SEASON TABS ─────────────────────────────────────────
+function switchOs(id, el) {
+  document.querySelectorAll('.os-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.os-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('os-' + id).classList.add('active');
+}
+
+// ── POSITION TABS ───────────────────────────────────────────
+function switchPos(id, el) {
+  document.querySelectorAll('.pos-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pos-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pos-' + id).classList.add('active');
+}
+
+// ── INDIVIDUAL / TEAM TOGGLE ────────────────────────────────
+function toggleTrack() {
+  const sw = document.getElementById('togSwitch');
+  const ind = document.getElementById('track-individual');
+  const team = document.getElementById('track-team');
+  const lblI = document.getElementById('lbl-ind');
+  const lblT = document.getElementById('lbl-team');
+  const isOn = sw.classList.toggle('on');
+  ind.style.display = isOn ? 'none' : 'block';
+  team.style.display = isOn ? 'block' : 'none';
+  lblI.classList.toggle('active', !isOn);
+  lblT.classList.toggle('active', isOn);
+}
+
+// ── NAV SCROLL ──────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').style.background =
+    window.scrollY > 50 ? 'rgba(8,8,7,.98)' : 'rgba(8,8,7,.92)';
+});
+</script>
+</body>
+</html>
