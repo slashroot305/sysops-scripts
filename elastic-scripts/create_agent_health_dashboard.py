@@ -168,12 +168,12 @@ def build_dashboard():
             "domain": ["online", "offline", "degraded"],
             "range": ["#007871", "#BD271E", "#F5A700"]
         }],
-        "legends": [{"fill": "color", "title": "Status", "orient": "right", "labelFontSize": 12, "titleFontSize": 12}],
+        "legends": [{"fill": "color", "title": "Status", "orient": "bottom", "labelFontSize": 12, "titleFontSize": 12, "direction": "horizontal"}],
         "marks": [
             {
                 "type": "arc", "from": {"data": "pie"},
                 "encode": {"enter": {
-                    "x": {"signal": "width / 2 - 30"},
+                    "x": {"signal": "width / 2"},
                     "y": {"signal": "height / 2"},
                     "startAngle": {"field": "startAngle"},
                     "endAngle": {"field": "endAngle"},
@@ -187,7 +187,7 @@ def build_dashboard():
             {
                 "type": "text", "from": {"data": "pie"},
                 "encode": {"enter": {
-                    "x": {"signal": "width / 2 - 30"},
+                    "x": {"signal": "width / 2"},
                     "y": {"signal": "height / 2"},
                     "radius": {"signal": "min(width,height) / 2.8 + 16"},
                     "theta": {"signal": "(datum.startAngle + datum.endAngle) / 2"},
