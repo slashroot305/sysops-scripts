@@ -138,7 +138,7 @@ def build_dashboard():
                     "text": {"value": "agents online"},
                     "x": {"signal": "width / 2"},
                     "y": {"signal": "height / 2 + 40"},
-                    "fontSize": {"value": 13},
+                    "fontSize": {"value": 15},
                     "align": {"value": "center"},
                     "fill": {"value": "#69707D"}
                 }}
@@ -168,7 +168,7 @@ def build_dashboard():
             "domain": ["online", "offline", "degraded"],
             "range": ["#007871", "#BD271E", "#F5A700"]
         }],
-        "legends": [{"fill": "color", "title": "Status", "orient": "bottom", "labelFontSize": 12, "titleFontSize": 12, "direction": "horizontal"}],
+        "legends": [{"fill": "color", "title": "Status", "orient": "bottom", "labelFontSize": 14, "titleFontSize": 14, "direction": "horizontal"}],
         "marks": [
             {
                 "type": "arc", "from": {"data": "pie"},
@@ -194,7 +194,7 @@ def build_dashboard():
                     "text": {"signal": "datum.key + ' (' + datum.doc_count + ')'"},
                     "align": {"value": "center"},
                     "baseline": {"value": "middle"},
-                    "fontSize": {"value": 11},
+                    "fontSize": {"value": 13},
                     "fontWeight": {"value": "bold"},
                     "fill": {"value": "#343741"}
                 }}
@@ -223,10 +223,10 @@ def build_dashboard():
                 {"type": "formula", "as": "os",        "expr": "datum._source.os"},
                 {"type": "formula", "as": "checkin",   "expr": "slice(datum._source.last_checkin, 0, 19)"},
                 {"type": "window",  "ops": ["row_number"], "as": ["rn"]},
-                {"type": "formula", "as": "y",         "expr": "datum.rn * 26 + 30"}
+                {"type": "formula", "as": "y",         "expr": "datum.rn * 30 + 34"}
             ]
         }],
-        "signals": [{"name": "height", "update": "length(data('agents')) * 26 + 50"}],
+        "signals": [{"name": "height", "update": "length(data('agents')) * 30 + 54"}],
         "scales": [{
             "name": "sc", "type": "ordinal",
             "domain": ["online", "offline", "degraded"],
@@ -234,23 +234,23 @@ def build_dashboard():
         }],
         "marks": [
             {"type": "rule", "encode": {"enter": {"x": {"value": 0}, "x2": {"signal": "width"}, "y": {"value": 22}, "stroke": {"value": "#D3DAE6"}, "strokeWidth": {"value": 1}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 0},   "y": {"value": 14}, "text": {"value": "HOSTNAME"},      "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 200}, "y": {"value": 14}, "text": {"value": "STATUS"},        "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 300}, "y": {"value": 14}, "text": {"value": "OS"},            "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 400}, "y": {"value": 14}, "text": {"value": "VERSION"},       "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 480}, "y": {"value": 14}, "text": {"value": "LAST CHECK-IN"}, "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 0},   "y": {"field": "y"}, "text": {"field": "hostname"}, "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}, "limit": {"value": 195}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 200}, "y": {"field": "y"}, "text": {"field": "status"},   "fill": {"scale": "sc", "field": "status"}, "fontSize": {"value": 11}, "fontWeight": {"value": "bold"}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 300}, "y": {"field": "y"}, "text": {"field": "os"},       "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}, "limit": {"value": 95}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 400}, "y": {"field": "y"}, "text": {"field": "version"},  "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 480}, "y": {"field": "y"}, "text": {"field": "checkin"},  "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}}}}
+            {"type": "text", "encode": {"enter": {"x": {"value": 0},   "y": {"value": 14}, "text": {"value": "HOSTNAME"},      "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 13}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 200}, "y": {"value": 14}, "text": {"value": "STATUS"},        "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 13}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 300}, "y": {"value": 14}, "text": {"value": "OS"},            "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 13}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 400}, "y": {"value": 14}, "text": {"value": "VERSION"},       "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 13}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 480}, "y": {"value": 14}, "text": {"value": "LAST CHECK-IN"}, "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 13}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 0},   "y": {"field": "y"}, "text": {"field": "hostname"}, "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 13}, "limit": {"value": 195}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 200}, "y": {"field": "y"}, "text": {"field": "status"},   "fill": {"scale": "sc", "field": "status"}, "fontSize": {"value": 13}, "fontWeight": {"value": "bold"}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 300}, "y": {"field": "y"}, "text": {"field": "os"},       "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 13}, "limit": {"value": 95}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 400}, "y": {"field": "y"}, "text": {"field": "version"},  "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 13}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 480}, "y": {"field": "y"}, "text": {"field": "checkin"},  "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 13}}}}
         ]
     }
 
     panels = [
-        {"type": "visualization", "gridData": {"x": 0,  "y": 0, "w": 8,  "h": 8,  "i": "p1"}, "panelIndex": "p1", "embeddableConfig": {"enhancements": {}}, "panelRefName": "panel_0"},
-        {"type": "visualization", "gridData": {"x": 8,  "y": 0, "w": 16, "h": 8,  "i": "p2"}, "panelIndex": "p2", "embeddableConfig": {"enhancements": {}}, "panelRefName": "panel_1"},
-        {"type": "visualization", "gridData": {"x": 0,  "y": 8, "w": 24, "h": 14, "i": "p3"}, "panelIndex": "p3", "embeddableConfig": {"enhancements": {}}, "panelRefName": "panel_2"},
+        {"type": "visualization", "gridData": {"x": 0,  "y": 0,  "w": 8,  "h": 12, "i": "p1"}, "panelIndex": "p1", "embeddableConfig": {"enhancements": {}}, "panelRefName": "panel_0"},
+        {"type": "visualization", "gridData": {"x": 8,  "y": 0,  "w": 16, "h": 12, "i": "p2"}, "panelIndex": "p2", "embeddableConfig": {"enhancements": {}}, "panelRefName": "panel_1"},
+        {"type": "visualization", "gridData": {"x": 0,  "y": 12, "w": 24, "h": 22, "i": "p3"}, "panelIndex": "p3", "embeddableConfig": {"enhancements": {}}, "panelRefName": "panel_2"},
     ]
 
     objects = [
