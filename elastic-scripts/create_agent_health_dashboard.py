@@ -234,16 +234,16 @@ def build_dashboard():
         }],
         "marks": [
             {"type": "rule", "encode": {"enter": {"x": {"value": 0}, "x2": {"signal": "width"}, "y": {"value": 22}, "stroke": {"value": "#D3DAE6"}, "strokeWidth": {"value": 1}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 0},   "y": {"value": 14}, "text": {"value": "HOSTNAME"},      "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 11}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 0},   "y": {"value": 14}, "text": {"value": "HOSTNAME"},      "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
             {"type": "text", "encode": {"enter": {"x": {"value": 200}, "y": {"value": 14}, "text": {"value": "STATUS"},        "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 300}, "y": {"value": 14}, "text": {"value": "OS"},            "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 400}, "y": {"value": 14}, "text": {"value": "VERSION"},       "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "encode": {"enter": {"x": {"value": 480}, "y": {"value": 14}, "text": {"value": "LAST CHECK-IN"}, "fontWeight": {"value": "bold"}, "fill": {"value": "#343741"}, "fontSize": {"value": 11}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 0},   "y": {"field": "y"}, "text": {"field": "hostname"}, "fill": {"value": "#343741"},                "fontSize": {"value": 11}, "limit": {"value": 195}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 300}, "y": {"value": 14}, "text": {"value": "OS"},            "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 400}, "y": {"value": 14}, "text": {"value": "VERSION"},       "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
+            {"type": "text", "encode": {"enter": {"x": {"value": 480}, "y": {"value": 14}, "text": {"value": "LAST CHECK-IN"}, "fontWeight": {"value": "bold"}, "fill": {"value": "#FFFFFF"}, "fontSize": {"value": 11}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 0},   "y": {"field": "y"}, "text": {"field": "hostname"}, "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}, "limit": {"value": 195}}}},
             {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 200}, "y": {"field": "y"}, "text": {"field": "status"},   "fill": {"scale": "sc", "field": "status"}, "fontSize": {"value": 11}, "fontWeight": {"value": "bold"}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 300}, "y": {"field": "y"}, "text": {"field": "os"},       "fill": {"value": "#343741"},                "fontSize": {"value": 11}, "limit": {"value": 95}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 400}, "y": {"field": "y"}, "text": {"field": "version"},  "fill": {"value": "#343741"},                "fontSize": {"value": 11}}}},
-            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 480}, "y": {"field": "y"}, "text": {"field": "checkin"},  "fill": {"value": "#343741"},                "fontSize": {"value": 11}}}}
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 300}, "y": {"field": "y"}, "text": {"field": "os"},       "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}, "limit": {"value": 95}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 400}, "y": {"field": "y"}, "text": {"field": "version"},  "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}}}},
+            {"type": "text", "from": {"data": "agents"}, "encode": {"enter": {"x": {"value": 480}, "y": {"field": "y"}, "text": {"field": "checkin"},  "fill": {"value": "#FFFFFF"},                "fontSize": {"value": 11}}}}
         ]
     }
 
