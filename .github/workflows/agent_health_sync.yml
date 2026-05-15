@@ -1,0 +1,45 @@
+name: Sync Agent Health Dashboard
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # every 15 minutes
+  workflow_dispatch:           # manual trigger from GitHub UI
+    inputs:
+      rebuild_dashboard:
+        description: 'Rebuild Kibana dashboard (yes/no)'
+        required: false
+        default: 'no'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: python_scripts/elastic-scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r python_scripts/elastic-scripts/requirements.txt
+
+      - name: Sync agents
+        env:
+          ELASTIC_API_KEY: ${{ secrets.ELASTIC_API_KEY }}
+          KIBANA_URL: ${{ secrets.KIBANA_URL }}
+          ES_URL: ${{ secrets.ES_URL }}
+        run: python python_scripts/elastic-scripts/create_agent_health_dashboard.py --sync-only
+
+      - name: Rebuild dashboard (manual trigger only)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.rebuild_dashboard == 'yes'
+        env:
+          ELASTIC_API_KEY: ${{ secrets.ELASTIC_API_KEY }}
+          KIBANA_URL: ${{ secrets.KIBANA_URL }}
+          ES_URL: ${{ secrets.ES_URL }}
+        run: python python_scripts/elastic-scripts/create_agent_health_dashboard.py --dashboard-only
