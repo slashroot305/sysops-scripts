@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elite Raiders Soccer — NFSA Elite Development System</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--dk:#0B0C09;--dk2:#111309;--dk3:#181A10;--dk4:#1F2216;--green:#0A6A48;--lime:#18C472;--lime2:#52E09A;--gold:#C08008;--gold2:#F0A820;--red2:#E83C3C;--blue2:#3A7AE0;--orange2:#E86818;--purple2:#8858E8;--cream:#EAE4D8;--cream2:#C4BCA8;--mist:#5A5A50;--r:5px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--dk);color:var(--cream);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+body::before{content:'© 2026 NFSA · ELITE RAIDERS SOCCER';position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:3px;color:rgba(24,196,114,.015);transform:rotate(-25deg);white-space:nowrap;font-family:'Barlow Condensed',sans-serif;}
+
+/* contact bar */
+.cbar{background:var(--green);padding:7px 40px;display:flex;align-items:center;justify-content:flex-end;gap:20px;flex-wrap:wrap;}
+.cbar a,.cbar span{font-size:10px;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.88);display:inline-flex;align-items:center;gap:6px;transition:color .15s;}
+.cbar a:hover{color:#fff;}
+.cbar-sep{color:rgba(255,255,255,.2);font-size:10px;}
+.cbar-brand{font-size:10px;font-weight:900;letter-spacing:3px;color:#fff;text-transform:uppercase;}
+
+/* hero */
+.hero{min-height:100vh;background:var(--dk2);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(24,196,114,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(24,196,114,.022) 1px,transparent 1px);background-size:60px 60px;}
+.hero-glow1{position:absolute;top:-10%;left:-5%;width:800px;height:800px;background:radial-gradient(circle,rgba(10,106,72,.15) 0%,transparent 60%);pointer-events:none;}
+.hero-glow2{position:absolute;bottom:-15%;right:-5%;width:600px;height:600px;background:radial-gradient(circle,rgba(192,128,8,.08) 0%,transparent 65%);pointer-events:none;}
+.hero-inner{max-width:1400px;margin:0 auto;padding:100px 60px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:1;}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;gap:48px;padding:80px 28px 60px;}}
+.hero-eyebrow{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--lime);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.hero-eyebrow::before{content:'';width:20px;height:1.5px;background:var(--lime);}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(64px,9vw,120px);font-weight:900;line-height:.82;letter-spacing:-2px;text-transform:uppercase;margin-bottom:22px;}
+.hero h1 em{color:var(--lime);font-style:normal;}
+.hero-desc{font-size:14px;color:var(--cream2);line-height:1.9;max-width:480px;margin-bottom:36px;}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 28px;border-radius:var(--r);transition:all .2s;cursor:pointer;}
+.btn-primary{background:var(--lime);color:var(--dk);}
+.btn-primary:hover{background:var(--lime2);transform:translateY(-2px);}
+.btn-secondary{border:1.5px solid rgba(24,196,114,.3);color:var(--lime);}
+.btn-secondary:hover{border-color:var(--lime);background:rgba(24,196,114,.06);}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap;}
+
+/* hero right — stat grid */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:24px 20px;}
+.stat-n{font-family:'Barlow Condensed',sans-serif;font-size:64px;font-weight:900;color:var(--gold2);line-height:1;margin-bottom:4px;}
+.stat-l{font-size:9px;color:var(--mist);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:8px;}
+.stat-d{font-size:11px;color:var(--cream2);line-height:1.6;}
+.stat-box.accent{background:rgba(24,196,114,.05);border-color:rgba(24,196,114,.12);}
+.stat-box.accent .stat-n{color:var(--lime);}
+
+/* sections */
+.sec{padding:100px 60px;}
+@media(max-width:768px){.sec{padding:64px 28px;}}
+.sec-inner{max-width:1400px;margin:0 auto;}
+.eyebrow{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:'';width:16px;height:1.5px;background:var(--lime);}
+.sh2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(44px,6vw,80px);font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-1px;margin-bottom:16px;}
+.sh2 em{color:var(--lime);font-style:normal;}
+.lead{font-size:14px;color:var(--cream2);line-height:1.85;max-width:680px;margin-bottom:40px;}
+.divider{height:1px;background:rgba(255,255,255,.04);margin:0;}
+
+/* grids */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:1000px){.g3{grid-template-columns:1fr 1fr;}.g4{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr;}.os-twocol{grid-template-columns:1fr !important;}}
+
+/* cards */
+.card{background:var(--dk3);border:1px solid rgba(255,255,255,.055);border-radius:var(--r);padding:20px;}
+.card-hd{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;color:var(--cream);margin-bottom:6px;}
+.card-sub{font-size:9px;color:var(--mist);margin-bottom:8px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;}
+.card-text{font-size:12px;color:var(--cream2);line-height:1.8;}
+.lcard{background:var(--dk3);border:1px solid rgba(255,255,255,.055);border-radius:var(--r);border-left:3px solid var(--ac,var(--lime));padding:14px 18px;}
+
+/* drill showcase */
+.drill-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:900px){.drill-showcase{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.drill-showcase{grid-template-columns:1fr;}}
+.dscard{background:var(--dk3);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;}
+.dscard:hover{border-color:rgba(24,196,114,.2);transform:translateY(-3px);}
+.dscard-pitch{background:rgba(10,106,72,.06);padding:12px;}
+.dscard-info{padding:14px 16px;}
+.dscard-num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--lime);font-weight:500;}
+.dscard-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--cream);margin:3px 0;line-height:1;}
+.dscard-meta{font-size:10px;color:var(--mist);}
+
+/* animations */
+.dash-flow{stroke-dasharray:7 4;animation:dashA 1.8s linear infinite;}
+.dash-slow{stroke-dasharray:7 4;animation:dashA 3s linear infinite;}
+.dash-r{stroke-dasharray:7 4;animation:dashA 1.8s linear infinite reverse;}
+@keyframes dashA{to{stroke-dashoffset:-22;}}
+.pulse{animation:pulseA 2s ease-out infinite;}
+@keyframes pulseA{0%{r:10;opacity:.5;}100%{r:20;opacity:0;}}
+.bob{animation:bobA 2.2s ease-in-out infinite;}
+@keyframes bobA{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+
+/* pricing */
+.pcard{background:var(--dk3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:32px;transition:border-color .2s;}
+.pcard.featured{border-color:rgba(24,196,114,.25);background:rgba(10,106,72,.06);}
+.price-n{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;color:var(--gold2);line-height:1;margin-bottom:4px;}
+.price-per{font-size:10px;color:var(--mist);font-weight:700;letter-spacing:.5px;}
+.price-list{display:flex;flex-direction:column;gap:8px;margin:20px 0 24px;}
+.price-item{font-size:12px;color:var(--cream2);display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+.price-item::before{content:'✓';color:var(--lime);font-weight:700;flex-shrink:0;}
+.cta-btn{width:100%;padding:14px;border-radius:var(--r);font-family:'Barlow',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.cta-btn.lime{background:var(--lime);color:var(--dk);}
+.cta-btn.lime:hover{background:var(--lime2);}
+.cta-btn.outline{border:1.5px solid rgba(24,196,114,.3);color:var(--lime);background:none;}
+.cta-btn.outline:hover{border-color:var(--lime);}
+
+/* drill count banner */
+.drill-banner{background:var(--dk4);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);padding:28px 60px;}
+.drill-banner-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.db-stat{text-align:center;}
+.db-n{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--lime);line-height:1;}
+.db-l{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--mist);font-weight:700;margin-top:2px;}
+
+/* footer */
+footer{background:var(--dk2);border-top:1px solid rgba(255,255,255,.04);padding:48px 60px 32px;}
+.footer-inner{max-width:1400px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:64px;margin-bottom:48px;}
+@media(max-width:800px){.footer-grid{grid-template-columns:1fr;gap:32px;}}
+.footer-brand{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;letter-spacing:2px;color:var(--cream);text-transform:uppercase;}
+.footer-brand em{color:var(--lime);font-style:normal;}
+.footer-copy{font-size:10px;color:var(--mist);line-height:1.8;margin-top:10px;}
+.footer-h{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;}
+.footer-link{font-size:12px;color:var(--cream2);display:block;margin-bottom:7px;transition:color .15s;}
+.footer-link:hover{color:var(--lime);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.04);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy-line{font-size:10px;color:var(--mist2,#2A2A22);}
+/* contact modal */
+.cmodal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;}
+.cmodal-overlay.open{display:flex;}
+.cmodal-box{background:var(--dk3);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:36px;max-width:480px;width:100%;position:relative;}
+.cmodal-close{position:absolute;top:14px;right:16px;color:var(--mist);font-size:18px;line-height:1;background:none;border:none;cursor:pointer;transition:color .15s;}
+.cmodal-close:hover{color:var(--cream);}
+.cmodal-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;color:var(--cream);margin-bottom:4px;}
+.cmodal-sub{font-size:11px;color:var(--mist);margin-bottom:24px;letter-spacing:.5px;}
+.cmodal-label{display:block;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mist);margin-bottom:6px;}
+.cmodal-input{width:100%;background:var(--dk2);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:10px 14px;color:var(--cream);font-family:'Barlow',sans-serif;font-size:13px;outline:none;transition:border-color .15s;}
+.cmodal-input:focus{border-color:rgba(24,196,114,.5);}
+.cmodal-field{margin-bottom:14px;}
+.cmodal-field:last-of-type{margin-bottom:20px;}
+.cmodal-submit{width:100%;background:var(--lime);color:var(--dk);font-family:'Barlow',sans-serif;font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:14px;border-radius:3px;border:none;cursor:pointer;transition:background .2s;}
+.cmodal-submit:hover{background:var(--lime2);}
+.cmodal-submit:disabled{opacity:.6;cursor:not-allowed;}
+.cmodal-msg{display:none;margin-top:14px;text-align:center;font-size:12px;font-weight:700;}
+.cmodal-success{color:var(--lime);}
+.cmodal-error{color:#E83C3C;}
+</style>
+</head>
+<body>
+
+<!-- CONTACT BAR -->
+<div class="cbar">
+  <a href="tel:+13318030897"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z" stroke="currentColor" stroke-width="2"/></svg>(331) 803-0897</a>
+  <span class="cbar-sep">|</span>
+  <button onclick="openContactModal('General Inquiry','Get In Touch')" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.88);display:inline-flex;align-items:center;gap:6px;transition:color .15s;padding:0;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.88)'"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/></svg>NFSA@eliteraiderssoccer.com</button>
+  <span class="cbar-sep">|</span>
+  <span class="cbar-brand">Elite Raiders Soccer</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">NFSA Elite Development System · Ages 12–19</div>
+      <h1>ELITE<br>RAID<br><em>ERS.</em></h1>
+      <p class="hero-desc">The most complete youth soccer development system available. 96 actual drills — all animated, all fully scripted. Built for players who are serious about performing at the highest level. Built by a coach who has done it.</p>
+      <div class="btn-row">
+        <button onclick="openContactModal('General Inquiry','Get Access')" class="btn btn-primary">Get Access →</button>
+        <a href="#drills" class="btn btn-secondary">See All 96 Drills</a>
+      </div>
+    </div>
+    <div>
+      <div class="stat-grid">
+        <div class="stat-box accent">
+          <div class="stat-n">96</div>
+          <div class="stat-l">Total Drills</div>
+          <div class="stat-d">Every one animated with live SVG diagrams and full coaching points.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n">30</div>
+          <div class="stat-l">Team Drills</div>
+          <div class="stat-d">Rondos, possession, transitions, press traps, and full 11v11 sessions.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n">46</div>
+          <div class="stat-l">Position Drills</div>
+          <div class="stat-d">CB, FB, DM, CM, Winger, Striker, GK — all running in parallel weekly.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n">20</div>
+          <div class="stat-l">Specialist Drills</div>
+          <div class="stat-d">Set pieces, spot kicks, pressing systems, and full system integration.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DRILL COUNT BANNER -->
+<div class="drill-banner">
+  <div class="drill-banner-inner">
+    <div class="db-stat"><div class="db-n">30</div><div class="db-l">Team Drills</div></div>
+    <div style="width:1px;height:40px;background:rgba(255,255,255,.05);"></div>
+    <div class="db-stat"><div class="db-n">13</div><div class="db-l">Set Piece Drills</div></div>
+    <div style="width:1px;height:40px;background:rgba(255,255,255,.05);"></div>
+    <div class="db-stat"><div class="db-n">4</div><div class="db-l">Pressing Systems</div></div>
+    <div style="width:1px;height:40px;background:rgba(255,255,255,.05);"></div>
+    <div class="db-stat"><div class="db-n">4</div><div class="db-l">Spot Kick Phases</div></div>
+    <div style="width:1px;height:40px;background:rgba(255,255,255,.05);"></div>
+    <div class="db-stat"><div class="db-n">5</div><div class="db-l">Formations</div></div>
+    <div style="width:1px;height:40px;background:rgba(255,255,255,.05);"></div>
+    <div class="db-stat"><div class="db-n">24</div><div class="db-l">Week Calendar</div></div>
+    <div style="width:1px;height:40px;background:rgba(255,255,255,.05);"></div>
+    <div class="db-stat"><div class="db-n">6</div><div class="db-l">Upgrade Tiers</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- IDENTITY -->
+<section class="sec" style="background:var(--dk2);">
+  <div class="sec-inner">
+    <div class="eyebrow">System Identity</div>
+    <div class="sh2">THREE NON-<br><em>NEGOTIABLES.</em></div>
+    <div class="g3">
+      <div class="card" style="border-top:3px solid var(--lime);">
+        <div style="font-size:32px;margin-bottom:12px;">🔴</div>
+        <div class="card-hd">Press First</div>
+        <div class="card-text">Win the ball back in under 6 seconds. Three players collapse on "PRESS!". Always coordinated — never solo. Built into 24 of the 96 drills so it becomes reflex, not thought.</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--gold2);">
+        <div style="font-size:32px;margin-bottom:12px;">🔵</div>
+        <div class="card-hd">Control the Pivot</div>
+        <div class="card-text">Every formation, every phase — the DM is the hub. All possession flows through the pivot. 12 drills specifically build the DM's 360° scan, switch pass, and press resistance.</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--blue2);">
+        <div style="font-size:32px;margin-bottom:12px;">⚡</div>
+        <div class="card-hd">Attack Vertically</div>
+        <div class="card-text">Wingers stay wide. 1v1 until won every time. All four goal-scoring routes practised equally — open play, set pieces, spot kicks, and counters. No passenger positions in this system.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DRILL SHOWCASE -->
+<section class="sec" id="drills">
+  <div class="sec-inner">
+    <div class="eyebrow">All 96 Drills — Animated</div>
+    <div class="sh2">EVERY DRILL.<br><em>LIVE DIAGRAM.</em></div>
+    <p class="lead">A sample of 12 drills below. The full program contains all 96 — each with an animated SVG pitch diagram, full coaching points, setup instructions, progressions, and player count.</p>
+    <div class="drill-showcase">
+
+      <!-- DRILL 01 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <rect x="20" y="10" width="200" height="120" rx="3" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.1)" stroke-width="1"/>
+            <circle cx="50" cy="70" r="12" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.4"/><text x="50" y="74" text-anchor="middle" fill="#52E09A" font-size="8" font-weight="700" font-family="Barlow,sans-serif">A</text>
+            <circle cx="120" cy="22" r="12" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.4"/><text x="120" y="26" text-anchor="middle" fill="#52E09A" font-size="8" font-weight="700" font-family="Barlow,sans-serif">B</text>
+            <circle cx="190" cy="70" r="12" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.4"/><text x="190" y="74" text-anchor="middle" fill="#52E09A" font-size="8" font-weight="700" font-family="Barlow,sans-serif">C</text>
+            <circle cx="120" cy="120" r="12" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.4"/><text x="120" y="124" text-anchor="middle" fill="#52E09A" font-size="8" font-weight="700" font-family="Barlow,sans-serif">D</text>
+            <circle cx="105" cy="62" r="10" fill="rgba(184,32,32,.4)" stroke="#E83C3C" stroke-width="1.2"/><circle cx="135" cy="88" r="10" fill="rgba(184,32,32,.4)" stroke="#E83C3C" stroke-width="1.2"/>
+            <path d="M62 67 L108 33" stroke="rgba(24,196,114,.65)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <path d="M132 28 L178 66" stroke="rgba(24,196,114,.65)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <path d="M178 76 L132 112" stroke="rgba(24,196,114,.65)" stroke-width="1.5" fill="none" class="dash-flow"/>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#01 · Team · Possession</div>
+          <div class="dscard-name">4v2 Barcelona Rondo</div>
+          <div class="dscard-meta">12×12 grid · 1-touch · All phases · 6–8 players</div>
+        </div>
+      </div>
+
+      <!-- DRILL 08 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(184,32,32,.03)"/>
+            <rect x="20" y="10" width="200" height="120" rx="3" fill="rgba(184,32,32,.03)" stroke="rgba(184,32,32,.1)" stroke-width="1"/>
+            <circle cx="50" cy="40" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.3"/>
+            <circle cx="120" cy="22" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.3"/>
+            <circle cx="190" cy="40" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.3"/>
+            <circle cx="50" cy="110" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.3"/>
+            <circle cx="120" cy="125" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.3"/>
+            <circle cx="190" cy="110" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.3"/>
+            <circle cx="105" cy="65" r="11" fill="rgba(184,32,32,.45)" stroke="#E83C3C" stroke-width="1.5"/><text x="105" y="69" text-anchor="middle" fill="#ff9999" font-size="7" font-family="Barlow,sans-serif">P1</text>
+            <circle cx="135" cy="88" r="11" fill="rgba(184,32,32,.45)" stroke="#E83C3C" stroke-width="1.5"/><text x="135" y="92" text-anchor="middle" fill="#ff9999" font-size="7" font-family="Barlow,sans-serif">P2</text>
+            <circle cx="120" cy="68" r="11" fill="rgba(184,32,32,.45)" stroke="#E83C3C" stroke-width="1.5"/><text x="120" y="72" text-anchor="middle" fill="#ff9999" font-size="7" font-family="Barlow,sans-serif">P3</text>
+            <path d="M114 63 Q98 52 62 47" stroke="#E83C3C" stroke-width="1.4" fill="none" class="dash-flow" stroke-dasharray="5,3"/>
+            <path d="M131 80 Q152 100 178 105" stroke="#E83C3C" stroke-width="1.4" fill="none" class="dash-flow" stroke-dasharray="5,3"/>
+            <circle cx="120" cy="60" r="5" fill="rgba(240,168,32,.7)"/>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#08 · Team · High Intensity</div>
+          <div class="dscard-name">Gegenpress 6v3 Turnover</div>
+          <div class="dscard-meta">Medium grid · Max intensity · Phase 1+ · 9 players</div>
+        </div>
+      </div>
+
+      <!-- DRILL 09 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <rect x="10" y="10" width="220" height="120" rx="3" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.08)" stroke-width="1"/>
+            <rect x="10" y="43" width="12" height="28" fill="none" stroke="rgba(24,196,114,.5)" stroke-width="1.4"/>
+            <rect x="10" y="78" width="12" height="28" fill="none" stroke="rgba(184,32,32,.5)" stroke-width="1.4"/>
+            <rect x="218" y="43" width="12" height="28" fill="none" stroke="rgba(24,196,114,.5)" stroke-width="1.4"/>
+            <rect x="218" y="78" width="12" height="28" fill="none" stroke="rgba(184,32,32,.5)" stroke-width="1.4"/>
+            <circle cx="75" cy="55" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="110" cy="85" r="10" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="165" cy="60" r="10" fill="rgba(184,32,32,.4)" stroke="#E83C3C" stroke-width="1.2"/>
+            <circle cx="135" cy="88" r="10" fill="rgba(184,32,32,.4)" stroke="#E83C3C" stroke-width="1.2"/>
+            <path d="M85 55 L154 62" stroke="rgba(240,168,32,.6)" stroke-width="2" fill="none" class="dash-flow" stroke-dasharray="7,4"/>
+            <path d="M153 66 Q80 80 28 70" stroke="rgba(24,196,114,.6)" stroke-width="1.5" fill="none" class="dash-flow"/>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#09 · Team · Transitions</div>
+          <div class="dscard-name">4-Goal Transition Blitz</div>
+          <div class="dscard-meta">Medium pitch · 4 goals · Max intensity · 8–12 players</div>
+        </div>
+      </div>
+
+      <!-- DRILL 31 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <path d="M10 95 Q60 20 130 52" stroke="rgba(192,128,8,.7)" stroke-width="2" fill="none" class="dash-flow"/>
+            <circle cx="130" cy="52" r="14" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.8"/>
+            <text x="130" y="56" text-anchor="middle" fill="#52E09A" font-size="9" font-weight="700" font-family="Barlow,sans-serif">CB</text>
+            <circle cx="155" cy="70" r="11" fill="rgba(184,32,32,.35)" stroke="#E83C3C" stroke-width="1.3"/>
+            <text x="155" y="74" text-anchor="middle" fill="#ff9999" font-size="8" font-family="Barlow,sans-serif">ST</text>
+            <path d="M130 39 Q112 15 70 24" stroke="rgba(24,196,114,.6)" stroke-width="2" fill="none" class="dash-flow"/>
+            <circle cx="12" cy="97" r="9" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.3"/>
+            <text x="12" y="101" text-anchor="middle" fill="#F0A820" font-size="7" font-family="Barlow,sans-serif">W</text>
+            <text x="120" y="132" text-anchor="middle" fill="rgba(24,196,114,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">Attack aerial · "AWAY!"</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#31 · CB · Aerial</div>
+          <div class="dscard-name">Aerial Dominance Circuit</div>
+          <div class="dscard-meta">20 min · 3 sets × 8 headers · All phases</div>
+        </div>
+      </div>
+
+      <!-- DRILL 43 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <circle cx="120" cy="70" r="50" stroke="rgba(24,196,114,.08)" stroke-width="1" fill="none"/>
+            <circle cx="120" cy="70" r="14" fill="rgba(24,196,114,.45)" stroke="#18C472" stroke-width="2"/>
+            <text x="120" y="74" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="Barlow,sans-serif">DM</text>
+            <circle cx="120" cy="18" r="9" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.2"/>
+            <circle cx="172" cy="55" r="9" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.2"/>
+            <circle cx="68" cy="55" r="9" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.2"/>
+            <circle cx="155" cy="115" r="9" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.2"/>
+            <circle cx="85" cy="115" r="9" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.2"/>
+            <text x="120" y="23" text-anchor="middle" fill="#F0A820" font-size="7" font-family="Barlow,sans-serif">N</text>
+            <text x="177" y="59" fill="#F0A820" font-size="7" font-family="Barlow,sans-serif">NE</text>
+            <text x="50" y="59" text-anchor="middle" fill="#F0A820" font-size="7" font-family="Barlow,sans-serif">NW</text>
+            <path d="M120 56 L120 27" stroke="rgba(24,196,114,.5)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <text x="120" y="132" text-anchor="middle" fill="rgba(24,196,114,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">scan 360° before every touch</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#43 · DM · Cognitive</div>
+          <div class="dscard-name">360° Pre-Scan Drill</div>
+          <div class="dscard-meta">15 min · Builds pre-scan reflex · Month 1+</div>
+        </div>
+      </div>
+
+      <!-- DRILL 55 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(192,128,8,.03)"/>
+            <rect x="10" y="10" width="220" height="120" rx="3" fill="rgba(192,128,8,.02)" stroke="rgba(192,128,8,.08)" stroke-width="1"/>
+            <circle cx="60" cy="70" r="13" fill="rgba(192,128,8,.5)" stroke="#F0A820" stroke-width="1.8"/>
+            <text x="60" y="74" text-anchor="middle" fill="#F0A820" font-size="8" font-weight="700" font-family="Barlow,sans-serif">W</text>
+            <circle cx="145" cy="70" r="11" fill="rgba(184,32,32,.4)" stroke="#E83C3C" stroke-width="1.4"/>
+            <text x="145" y="74" text-anchor="middle" fill="#ff9999" font-size="8" font-family="Barlow,sans-serif">RB</text>
+            <path d="M73 65 L134 66" stroke="rgba(192,128,8,.7)" stroke-width="2.5" fill="none" class="dash-flow"/>
+            <path d="M156 63 Q200 40 220 50" stroke="rgba(24,196,114,.5)" stroke-width="1.5" fill="none" class="dash-flow" stroke-dasharray="5,3"/>
+            <text x="75" y="44" fill="rgba(192,128,8,.5)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">slow→slow→BURST</text>
+            <rect x="215" y="40" width="12" height="50" fill="none" stroke="rgba(24,196,114,.25)" stroke-width="1.2"/>
+            <text x="120" y="132" text-anchor="middle" fill="rgba(192,128,8,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">beat the defender · deliver</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#55 · Winger · 1v1</div>
+          <div class="dscard-name">8-Min 1v1 Attack Sequence</div>
+          <div class="dscard-meta">20 min · Continuous 1v1s · Phase 1+</div>
+        </div>
+      </div>
+
+      <!-- DRILL 61 -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(184,32,32,.03)"/>
+            <rect x="50" y="6" width="140" height="100" rx="2" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.1)" stroke-width="1"/>
+            <rect x="80" y="6" width="80" height="35" fill="none" stroke="rgba(24,196,114,.25)" stroke-width="1.4"/>
+            <!-- 6 zones -->
+            <text x="68" y="25" fill="rgba(255,255,255,.1)" font-size="9" font-family="Barlow Condensed,sans-serif" font-weight="700">Z1</text>
+            <text x="100" y="25" fill="rgba(255,255,255,.1)" font-size="9" font-family="Barlow Condensed,sans-serif" font-weight="700">Z2</text>
+            <text x="130" y="25" fill="rgba(255,255,255,.1)" font-size="9" font-family="Barlow Condensed,sans-serif" font-weight="700">Z3</text>
+            <text x="68" y="60" fill="rgba(255,255,255,.12)" font-size="9" font-family="Barlow Condensed,sans-serif" font-weight="700">Z4</text>
+            <text x="100" y="60" fill="rgba(255,255,255,.1)" font-size="9" font-family="Barlow Condensed,sans-serif" font-weight="700">Z5</text>
+            <text x="130" y="60" fill="rgba(255,255,255,.12)" font-size="9" font-family="Barlow Condensed,sans-serif" font-weight="700">Z6</text>
+            <circle cx="120" cy="105" r="13" fill="rgba(184,32,32,.5)" stroke="#E83C3C" stroke-width="1.8"/>
+            <text x="120" y="109" text-anchor="middle" fill="#ff9999" font-size="8" font-weight="700" font-family="Barlow,sans-serif">ST</text>
+            <path d="M120 92 L120 66" stroke="rgba(184,32,32,.6)" stroke-width="2.5" fill="none" class="dash-flow"/>
+            <circle cx="120" cy="44" r="5" fill="rgba(240,168,32,.8)"/>
+            <text x="120" y="132" text-anchor="middle" fill="rgba(184,32,32,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">18 shots across 6 zones · track by zone</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#61 · Striker · Technical</div>
+          <div class="dscard-name">Finishing Across 6 Zones</div>
+          <div class="dscard-meta">25 min · 18 shots per session · All phases</div>
+        </div>
+      </div>
+
+      <!-- DRILL 75-78 SPOT KICKS -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <rect x="20" y="8" width="200" height="110" rx="2" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.1)" stroke-width="1"/>
+            <rect x="60" y="8" width="120" height="45" fill="none" stroke="rgba(24,196,114,.3)" stroke-width="1.5"/>
+            <!-- zones -->
+            <rect x="20" y="74" width="60" height="44" fill="rgba(24,196,114,.1)" rx="1"/>
+            <rect x="160" y="74" width="60" height="44" fill="rgba(24,196,114,.1)" rx="1"/>
+            <text x="50" y="100" text-anchor="middle" fill="rgba(24,196,114,.7)" font-size="14" font-weight="700" font-family="Barlow Condensed,sans-serif">Z4</text>
+            <text x="190" y="100" text-anchor="middle" fill="rgba(24,196,114,.7)" font-size="14" font-weight="700" font-family="Barlow Condensed,sans-serif">Z6</text>
+            <text x="120" y="42" text-anchor="middle" fill="rgba(255,255,255,.08)" font-size="12" font-family="Barlow Condensed,sans-serif" font-weight="700">Z2</text>
+            <circle cx="120" cy="128" r="4" fill="rgba(240,168,32,.8)"/>
+            <path d="M120 124 L50 92" stroke="rgba(24,196,114,.6)" stroke-width="2" fill="none" class="dash-flow"/>
+            <path d="M120 124 L190 92" stroke="rgba(24,196,114,.6)" stroke-width="2.5" fill="none" class="dash-flow"/>
+            <!-- GK -->
+            <circle cx="120" cy="44" r="11" fill="rgba(184,32,32,.4)" stroke="#E83C3C" stroke-width="1.3"/>
+            <text x="120" y="48" text-anchor="middle" fill="#ff9999" font-size="8" font-weight="700" font-family="Barlow,sans-serif">GK</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#75–78 · Spot Kicks · 4 Phases</div>
+          <div class="dscard-name">Penalty Training System</div>
+          <div class="dscard-meta">No pressure → Static GK → Sprint+GK → Full shootout</div>
+        </div>
+      </div>
+
+      <!-- DRILL 86 ALPHA -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <rect x="20" y="8" width="200" height="120" rx="2" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.08)" stroke-width="1"/>
+            <rect x="70" y="8" width="100" height="55" fill="none" stroke="rgba(24,196,114,.15)" stroke-width="1"/>
+            <!-- corner flag -->
+            <rect x="20" y="8" width="3" height="3" fill="rgba(24,196,114,.5)"/>
+            <!-- delivery arc -->
+            <path d="M22 12 Q80 10 100 35" stroke="rgba(240,168,32,.8)" stroke-width="2" fill="none" class="dash-flow"/>
+            <!-- near post player -->
+            <circle cx="95" cy="25" r="11" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.5"/>
+            <text x="95" y="29" text-anchor="middle" fill="#52E09A" font-size="7" font-family="Barlow,sans-serif">R1</text>
+            <!-- flick on -->
+            <path d="M95 14 Q110 10 128 14" stroke="rgba(24,196,114,.6)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <!-- far post runner -->
+            <circle cx="155" cy="32" r="11" fill="rgba(10,106,72,.5)" stroke="#18C472" stroke-width="1.5"/>
+            <text x="155" y="36" text-anchor="middle" fill="#52E09A" font-size="7" font-family="Barlow,sans-serif">R2</text>
+            <!-- penalty spot -->
+            <circle cx="120" cy="60" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.3"/>
+            <text x="120" y="64" text-anchor="middle" fill="#52E09A" font-size="7" font-family="Barlow,sans-serif">R3</text>
+            <!-- blockers -->
+            <circle cx="80" cy="50" r="8" fill="rgba(192,128,8,.4)" stroke="#F0A820" stroke-width="1"/><circle cx="65" cy="35" r="8" fill="rgba(192,128,8,.4)" stroke="#F0A820" stroke-width="1"/>
+            <text x="120" y="132" text-anchor="middle" fill="rgba(240,168,32,.5)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">ALPHA: near post flick-on corner</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#86 · Set Piece · Corner Play</div>
+          <div class="dscard-name">ALPHA — Near Post Flick-On</div>
+          <div class="dscard-meta">Inswinger · Near post redirect · Far post finish</div>
+        </div>
+      </div>
+
+      <!-- DRILL 92 GEGENPRESS -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(184,32,32,.03)"/>
+            <rect x="10" y="8" width="220" height="124" rx="3" fill="rgba(184,32,32,.02)" stroke="rgba(184,32,32,.1)" stroke-width="1"/>
+            <!-- press trigger callout -->
+            <rect x="90" y="15" width="60" height="20" rx="3" fill="rgba(184,32,32,.2)" stroke="rgba(184,32,32,.4)" stroke-width="1"/>
+            <text x="120" y="29" text-anchor="middle" fill="#E83C3C" font-size="9" font-weight="700" font-family="Barlow Condensed,sans-serif">PRESS!</text>
+            <!-- 3 pressers collapsing -->
+            <circle cx="90" cy="70" r="11" fill="rgba(184,32,32,.45)" stroke="#E83C3C" stroke-width="1.5"/>
+            <circle cx="150" cy="55" r="11" fill="rgba(184,32,32,.45)" stroke="#E83C3C" stroke-width="1.5"/>
+            <circle cx="150" cy="88" r="11" fill="rgba(184,32,32,.45)" stroke="#E83C3C" stroke-width="1.5"/>
+            <!-- ball carrier -->
+            <circle cx="120" cy="70" r="7" fill="rgba(240,168,32,.7)"/>
+            <path d="M101 68 L113 69" stroke="#E83C3C" stroke-width="2" fill="none" class="dash-flow"/>
+            <path d="M139 60 L127 67" stroke="#E83C3C" stroke-width="2" fill="none" class="dash-flow"/>
+            <path d="M139 83 L127 72" stroke="#E83C3C" stroke-width="2" fill="none" class="dash-flow"/>
+            <text x="120" y="125" text-anchor="middle" fill="rgba(184,32,32,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">6-second trap · 3-player collapse</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#92 · Pressing · System 1</div>
+          <div class="dscard-name">Gegenpress "PRESS!" Trigger</div>
+          <div class="dscard-meta">Week 1 · Most practised system · Phase 1+</div>
+        </div>
+      </div>
+
+      <!-- DRILL 67 GK -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <rect x="60" y="8" width="120" height="70" rx="2" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.15)" stroke-width="1.3"/>
+            <rect x="80" y="8" width="80" height="30" fill="none" stroke="rgba(24,196,114,.25)" stroke-width="1.3"/>
+            <circle cx="120" cy="45" r="14" fill="rgba(10,106,72,.55)" stroke="#18C472" stroke-width="2"/>
+            <text x="120" y="49" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="Barlow,sans-serif">GK</text>
+            <!-- shots from various angles -->
+            <path d="M30 90 L106 45" stroke="rgba(184,32,32,.6)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <path d="M120 110 L120 60" stroke="rgba(184,32,32,.6)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <path d="M210 90 L134 45" stroke="rgba(184,32,32,.6)" stroke-width="1.5" fill="none" class="dash-flow"/>
+            <!-- save arrows -->
+            <path d="M108 40 L82 16" stroke="rgba(24,196,114,.55)" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+            <path d="M130 40 L155 16" stroke="rgba(24,196,114,.55)" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+            <text x="120" y="128" text-anchor="middle" fill="rgba(24,196,114,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">face away → turn → save on TURN!</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#67 · GK · Reflexes</div>
+          <div class="dscard-name">Reaction Save Circuit</div>
+          <div class="dscard-meta">20 min · 3 sets × 6 saves · Weeks A only</div>
+        </div>
+      </div>
+
+      <!-- DRILL 24 FULL INTEGRATION -->
+      <div class="dscard">
+        <div class="dscard-pitch">
+          <svg viewBox="0 0 240 140" width="100%">
+            <rect width="240" height="140" fill="rgba(10,106,72,.04)"/>
+            <rect x="10" y="8" width="220" height="124" rx="3" fill="rgba(24,196,114,.03)" stroke="rgba(24,196,114,.08)" stroke-width="1"/>
+            <line x1="10" y1="70" x2="230" y2="70" stroke="rgba(24,196,114,.04)" stroke-width="1" stroke-dasharray="4,3"/>
+            <!-- mini tactical overlay with all systems -->
+            <rect x="15" y="13" width="55" height="15" rx="2" fill="rgba(184,32,32,.15)" stroke="rgba(184,32,32,.3)" stroke-width="1"/><text x="43" y="24" text-anchor="middle" fill="#E83C3C" font-size="7" font-weight="700" font-family="Barlow Condensed,sans-serif">PRESS!</text>
+            <rect x="75" y="13" width="55" height="15" rx="2" fill="rgba(58,122,224,.15)" stroke="rgba(58,122,224,.3)" stroke-width="1"/><text x="103" y="24" text-anchor="middle" fill="#3A7AE0" font-size="7" font-weight="700" font-family="Barlow Condensed,sans-serif">HOLD!</text>
+            <rect x="135" y="13" width="55" height="15" rx="2" fill="rgba(136,88,232,.15)" stroke="rgba(136,88,232,.3)" stroke-width="1"/><text x="163" y="24" text-anchor="middle" fill="#8858E8" font-size="7" font-weight="700" font-family="Barlow Condensed,sans-serif">SHADOW!</text>
+            <!-- players scattered -->
+            <circle cx="40" cy="90" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="80" cy="75" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="120" cy="85" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="160" cy="75" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="200" cy="90" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="60" cy="110" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <circle cx="100" cy="115" r="9" fill="rgba(10,106,72,.4)" stroke="#18C472" stroke-width="1.2"/>
+            <text x="120" y="130" text-anchor="middle" fill="rgba(24,196,114,.4)" font-size="8" font-style="italic" font-family="Barlow,sans-serif">11v11 · all 4 systems callable · final exam</text>
+          </svg>
+        </div>
+        <div class="dscard-info">
+          <div class="dscard-num">#96 · Integration · Full System</div>
+          <div class="dscard-name">11v11 — All Systems Live</div>
+          <div class="dscard-meta">Full pitch · All 4 press systems · Phase 4 · The final exam</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DRILL CATEGORIES -->
+<section class="sec" style="background:var(--dk2);">
+  <div class="sec-inner">
+    <div class="eyebrow">Full Drill Library — 96 Drills</div>
+    <div class="sh2">EVERY CATEGORY<br><em>COVERED.</em></div>
+    <div class="g2">
+      <div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="lcard" style="--ac:var(--lime);">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><strong style="color:var(--cream);font-size:14px;">Team Drills</strong><div style="font-size:11px;color:var(--mist);margin-top:2px;">#01–#30 · All formations</div></div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--lime);">30</div>
+            </div>
+            <div class="card-text" style="margin-top:8px;font-size:11px;">Rondos, possession, press traps, 4-goal transitions, full 11v11 with live press triggers. All three groups: Possession & Rondo, Press & Transitions, Shape & System.</div>
+          </div>
+          <div class="lcard" style="--ac:var(--gold2);">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><strong style="color:var(--cream);font-size:14px;">Position-Specific Drills</strong><div style="font-size:11px;color:var(--mist);margin-top:2px;">#31–#74 · 7 position groups</div></div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--gold2);">46</div>
+            </div>
+            <div class="card-text" style="margin-top:8px;font-size:11px;">CB (6), FB (6), DM (6), CM (6), Winger (6), Striker (6), GK (8). All 7 run in parallel every Thursday. Each position has a dedicated skill assessment bar and 50-minute program.</div>
+          </div>
+          <div class="lcard" style="--ac:var(--red2);">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><strong style="color:var(--cream);font-size:14px;">Set Piece Drills</strong><div style="font-size:11px;color:var(--mist);margin-top:2px;">#79–#91 · Named plays ALPHA–ZETA</div></div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--red2);">13</div>
+            </div>
+            <div class="card-text" style="margin-top:8px;font-size:11px;">Corner technique (inswing, outswing, short), free kick technique (driven, curl, chip), throw-ins, and six named team plays: ALPHA, BETA, DELTA, EPSILON, ZETA, KICKOFF A+B.</div>
+          </div>
+          <div class="lcard" style="--ac:var(--blue2);">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><strong style="color:var(--cream);font-size:14px;">Specialist Drills</strong><div style="font-size:11px;color:var(--mist);margin-top:2px;">#92–#96 + Spot Kick Phases</div></div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--blue2);">7</div>
+            </div>
+            <div class="card-text" style="margin-top:8px;font-size:11px;">Four pressing system drills (PRESS!, HOLD!, SHADOW!, TRAP!), pre-season fitness baseline, and full system integration 11v11. Plus 4 spot kick phases counted separately.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="height:100%;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div class="card-hd" style="margin-bottom:16px;">All 96 Drills Are:</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:50%;background:rgba(24,196,114,.15);border:1px solid rgba(24,196,114,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">▶</div>
+                <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Animated with live SVG diagrams</div><div class="card-text" style="font-size:11px;">Every drill has a live animated pitch diagram showing player positions, pass lines, movement patterns, and press triggers. Not static images — live animations.</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:50%;background:rgba(192,128,8,.12);border:1px solid rgba(192,128,8,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">📋</div>
+                <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Fully scripted with coaching points</div><div class="card-text" style="font-size:11px;">Setup, rules, progressions, coaching cues, player count, duration, and phase requirements — everything the coach needs to run the session without guessing.</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:50%;background:rgba(58,122,224,.12);border:1px solid rgba(58,122,224,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">🔄</div>
+                <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Updatable quarterly</div><div class="card-text" style="font-size:11px;">8–12 drills refreshed every quarter. Existing drills archived, never deleted. The system compounds in value over time — never stagnates.</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:50%;background:rgba(136,88,232,.12);border:1px solid rgba(136,88,232,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">📱</div>
+                <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Self-contained — no login needed</div><div class="card-text" style="font-size:11px;">Works on any device. The complete program is a single HTML file — bring it to the pitch on a tablet. No app downloads, subscriptions, or connectivity required.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OFF-SEASON -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="eyebrow">16-Week Off-Season Plan — Included in Every Package</div>
+    <div class="sh2">TWO PROGRAMS.<br><em>ONE SYSTEM.</em></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:56px;" class="os-twocol">
+      <div>
+        <p style="font-size:15px;color:var(--cream2);line-height:1.9;margin-bottom:20px;">Most players spend their off-season losing what they gained. This 16-week plan is built specifically around the physical demands of the NFSA program — so every player returns fitter, stronger, and faster than they left.</p>
+        <p style="font-size:14px;color:var(--mist);line-height:1.85;margin-bottom:28px;">The only question is whether your players are going to build in the off-season — or fall behind.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="padding:12px 20px;background:var(--dk3);border:1px solid rgba(24,196,114,.12);border-radius:var(--r);text-align:center;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--lime);line-height:1;">16</div>
+            <div style="font-size:9px;color:var(--mist);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;">Weeks</div>
+          </div>
+          <div style="padding:12px 20px;background:var(--dk3);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);text-align:center;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--gold2);line-height:1;">4</div>
+            <div style="font-size:9px;color:var(--mist);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;">Blocks</div>
+          </div>
+          <div style="padding:12px 20px;background:var(--dk3);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);text-align:center;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--gold2);line-height:1;">6</div>
+            <div style="font-size:9px;color:var(--mist);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;">Pillars</div>
+          </div>
+          <div style="padding:12px 20px;background:var(--dk3);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);text-align:center;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--gold2);line-height:1;">2</div>
+            <div style="font-size:9px;color:var(--mist);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;">Tracks</div>
+          </div>
+        </div>
+      </div>
+      <!-- BLOCK TIMELINE -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--blue2);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--blue2);min-width:28px;line-height:1;">01</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Recovery & Reset — Weeks 1–3</div>
+            <div style="font-size:11px;color:var(--mist);line-height:1.6;">Active recovery, mobility restoration, structural prep. No skipping this. Players who skip Block 1 peak early and fade in Month 5.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--red2);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--red2);min-width:28px;line-height:1;">02</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Strength Foundation — Weeks 4–8</div>
+            <div style="font-size:11px;color:var(--mist);line-height:1.6;">Trap bar deadlift, Nordic hamstring, hip thrust, Bulgarian split squat. Builds the physical base for aerial duels, 1v1s, and hold-up play.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--orange2);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--orange2);min-width:28px;line-height:1;">03</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Power & Speed — Weeks 9–13</div>
+            <div style="font-size:11px;color:var(--mist);line-height:1.6;">Sprint mechanics, plyometrics, repeated sprint capacity. Targets: 0–10m under 1.80s · 30m under 4.10s · Vertical jump over 55cm.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--lime);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--lime);min-width:28px;line-height:1;">04</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;">Pre-Season Ramp — Weeks 14–16</div>
+            <div style="font-size:11px;color:var(--mist);line-height:1.6;">Shift from athlete to footballer. Reconnect to the ball. Arrive at Week 1 of the in-season program sharp, fit, and ready to compete immediately.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 6 PILLARS -->
+    <div class="eyebrow" style="margin-bottom:18px;">What the Program Physically Demands — And How the Off-Season Builds It</div>
+    <div class="g3" style="margin-bottom:40px;">
+      <div class="card" style="border-top:2px solid var(--lime);">
+        <div style="font-size:26px;margin-bottom:8px;">⚡</div>
+        <div class="card-hd">Explosive Speed</div>
+        <div class="card-text">Press triggers and 1v1 winger isolation require 0–10 yard burst acceleration. Overspeed training, resistance sprints, and plyometric progressions build the fast-twitch base during the off-season.</div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--red2);">
+        <div style="font-size:26px;margin-bottom:8px;">🏋️</div>
+        <div class="card-hd">Functional Strength</div>
+        <div class="card-text">Aerial duels, hold-up play, and 1v1 physicality demand whole-body strength. Compound lifts — squat, hip hinge, pull — build soccer-specific power without bulk.</div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--blue2);">
+        <div style="font-size:26px;margin-bottom:8px;">🫀</div>
+        <div class="card-hd">Aerobic Engine</div>
+        <div class="card-text">Box-to-box midfielders and fullbacks cover 8–11km per match. Zone 2 base work, lactate threshold intervals, and repeated sprint capacity training build the engine to last 90 minutes.</div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--gold2);">
+        <div style="font-size:26px;margin-bottom:8px;">🦵</div>
+        <div class="card-hd">Injury Resilience</div>
+        <div class="card-text">High-intensity year-round play creates overuse risk. Targeted hip, ankle, and knee stability work — plus hamstring loading protocols — reduce injury risk before it ever happens.</div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--orange2);">
+        <div style="font-size:26px;margin-bottom:8px;">🔁</div>
+        <div class="card-hd">Change of Direction</div>
+        <div class="card-text">Pressing, covering, and dribbling all require rapid direction changes. Lateral mechanics, deceleration training, and agility pattern work that transfers directly from the gym to the pitch.</div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--purple2);">
+        <div style="font-size:26px;margin-bottom:8px;">🧠</div>
+        <div class="card-hd">Mental Resilience</div>
+        <div class="card-text">High-tempo soccer demands composure under fatigue. Visualization protocols, pressure inoculation drills, identity language, and performance journaling — the mental edge is trained, not inherited.</div>
+      </div>
+    </div>
+
+    <!-- INDIVIDUAL vs TEAM -->
+    <div style="background:var(--dk2);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;" class="os-twocol">
+      <div>
+        <div class="eyebrow" style="margin-bottom:10px;">Two Training Tracks</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;text-transform:uppercase;color:var(--cream);line-height:.92;margin-bottom:14px;">SOLO OR<br><em style="color:var(--lime);font-style:normal;">WITH YOUR SQUAD.</em></div>
+        <p style="font-size:12px;color:var(--cream2);line-height:1.8;">The off-season plan includes both an individual training track — for players training alone — and a full team track with 8 documented team sessions. Both tracks are fully coded, scripted, and included in every package at no extra cost.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:var(--lime);font-weight:700;font-size:16px;flex-shrink:0;margin-top:1px;">✓</span>
+          <div style="font-size:12px;color:var(--cream2);line-height:1.6;"><strong style="color:var(--cream);">10 coded individual exercises</strong> — trap bar deadlift, Nordic hamstring, box jumps, sprint protocols, Yo-Yo test, visualization sessions, and more. Every set/rep scheme documented.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:var(--lime);font-weight:700;font-size:16px;flex-shrink:0;margin-top:1px;">✓</span>
+          <div style="font-size:12px;color:var(--cream2);line-height:1.6;"><strong style="color:var(--cream);">8 team sessions</strong> — conditioning circuits, sprint relays, possession fitness rondos, position group strength days, high-intensity SSG batteries, and more.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:var(--lime);font-weight:700;font-size:16px;flex-shrink:0;margin-top:1px;">✓</span>
+          <div style="font-size:12px;color:var(--cream2);line-height:1.6;"><strong style="color:var(--cream);">Full nutrition framework</strong> — carbohydrate timing, protein targets by age and bodyweight, pre-match protocols, hydration benchmarks, and recovery nutrition windows.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:var(--lime);font-weight:700;font-size:16px;flex-shrink:0;margin-top:1px;">✓</span>
+          <div style="font-size:12px;color:var(--cream2);line-height:1.6;"><strong style="color:var(--cream);">Season Launch Checklist</strong> — 7 measurable benchmarks every player completes before Week 1 of the in-season program begins.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="sec" id="pricing">
+  <div class="sec-inner">
+    <div class="eyebrow">Pricing</div>
+    <div class="sh2">THREE LEVELS.<br><em>ONE SYSTEM.</em></div>
+    <p class="lead">Whether you're a player, a coach, or an academy — there is an access level built for your situation. Player and Coach licenses offer flexible monthly billing or a discounted annual rate. Academy is annual only.</p>
+
+    <!-- billing toggle -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:32px;flex-wrap:wrap;">
+      <div style="display:flex;gap:4px;background:var(--dk3);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:4px;">
+        <button id="btn-monthly" onclick="setBilling('monthly')" style="font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:8px 18px;border-radius:3px;border:none;cursor:pointer;background:var(--lime);color:var(--dk);transition:all .15s;">Monthly</button>
+        <button id="btn-annual" onclick="setBilling('annual')" style="font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:8px 18px;border-radius:3px;border:none;cursor:pointer;background:transparent;color:var(--mist);transition:all .15s;">Annual <span style="font-size:9px;color:var(--lime);">Save 20%</span></button>
+        <button id="btn-onetime" onclick="setBilling('onetime')" style="font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:8px 18px;border-radius:3px;border:none;cursor:pointer;background:transparent;color:var(--mist);transition:all .15s;">Own It</button>
+      </div>
+      <div id="billing-note" style="font-size:11px;color:var(--mist);line-height:1.6;">Billed monthly — cancel anytime. Full access from day one.</div>
+    </div>
+
+    <div class="g3">
+      <!-- PLAYER -->
+      <div class="pcard">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mist);margin-bottom:12px;">Player Access</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+          <div class="price-n" id="player-price">$24</div>
+          <div id="player-suffix" style="font-size:13px;color:var(--mist);font-weight:700;">/mo</div>
+        </div>
+        <div class="price-per" id="player-per">Billed monthly · cancel anytime</div>
+        <div id="player-save" style="display:none;font-size:10px;font-weight:700;color:var(--lime);margin-top:5px;letter-spacing:.3px;">— Save $50 vs monthly</div>
+        <div class="price-list" style="margin-top:14px;">
+          <div class="price-item">Complete 96-drill in-season program</div>
+          <div class="price-item">16-week off-season conditioning plan</div>
+          <div class="price-item">All animated drills — team, position, set piece</div>
+          <div class="price-item">5-formation playbook + GK program</div>
+          <div class="price-item">24-week in-season calendar</div>
+          <div class="price-item">Mental performance + nutrition framework</div>
+          <div class="price-item">Quarterly drill refresh (8–12 new drills)</div>
+        </div>
+        <button onclick="openContactModal('Player Access','Get Player Access')" class="cta-btn outline" style="display:block;text-align:center;margin-top:20px;width:100%;">Get Player Access</button>
+      </div>
+
+      <!-- COACH -->
+      <div class="pcard featured">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;">⭐ Coach License — Most Popular</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+          <div class="price-n" id="coach-price">$74</div>
+          <div id="coach-suffix" style="font-size:13px;color:var(--mist);font-weight:700;">/mo</div>
+        </div>
+        <div class="price-per" id="coach-per">Billed monthly · cancel anytime</div>
+        <div id="coach-save" style="display:none;font-size:10px;font-weight:700;color:var(--lime);margin-top:5px;letter-spacing:.3px;">— Save $239 vs monthly</div>
+        <div class="price-list" style="margin-top:14px;">
+          <div class="price-item">Everything in Player Access</div>
+          <div class="price-item">Both programs for up to 35 players</div>
+          <div class="price-item">All 6 upgrade tiers included quarterly + annually</div>
+          <div class="price-item">Formation expansion packs biannually</div>
+          <div class="price-item">Set piece expansion (2–4 new plays per period)</div>
+          <div class="price-item">Email support from Nana directly</div>
+        </div>
+        <button onclick="openContactModal('Coach License','Get Coach License')" class="cta-btn lime" style="display:block;text-align:center;margin-top:20px;width:100%;">Get Coach License</button>
+      </div>
+
+      <!-- ACADEMY -->
+      <div class="pcard">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mist);margin-bottom:12px;">Academy License</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+          <div class="price-n">$3,499</div>
+          <div style="font-size:13px;color:var(--mist);font-weight:700;">/yr</div>
+        </div>
+        <div class="price-per">Annual only · unlimited coaches + players</div>
+        <div style="font-size:10px;color:var(--mist);margin-top:8px;font-style:italic;">Institutional commitment from both sides.</div>
+        <div class="price-list" style="margin-top:14px;">
+          <div class="price-item">Everything in Coach License</div>
+          <div class="price-item">Unlimited coaches and players</div>
+          <div class="price-item">ALL 6 upgrade tiers auto-delivered</div>
+          <div class="price-item">Early access to new content before general release</div>
+          <div class="price-item">Direct contact with Nana — custom program adjustments</div>
+          <div class="price-item">Priority for in-person coaching sessions</div>
+        </div>
+        <button onclick="openContactModal('Academy License','Get Academy License')" class="cta-btn outline" style="display:block;text-align:center;margin-top:20px;width:100%;">Get Academy License</button>
+      </div>
+    </div>
+
+    <!-- COMPARISON NOTE -->
+    <div style="margin-top:28px;padding:18px 24px;background:var(--dk3);border:1px solid rgba(255,255,255,.06);border-radius:5px;display:flex;gap:32px;flex-wrap:wrap;align-items:center;">
+      <div style="font-size:12px;color:var(--cream2);line-height:1.7;"><strong style="color:var(--cream);">Monthly</strong> — lowest barrier to entry. Full access from day one. Cancel anytime.</div>
+      <div style="width:1px;height:32px;background:rgba(255,255,255,.07);flex-shrink:0;"></div>
+      <div style="font-size:12px;color:var(--cream2);line-height:1.7;"><strong style="color:var(--cream);">Annual</strong> — best value. Save 20%. All 6 upgrade tiers included. Preferred for coaches running a full season.</div>
+      <div style="width:1px;height:32px;background:rgba(255,255,255,.07);flex-shrink:0;"></div>
+      <div style="font-size:12px;color:var(--cream2);line-height:1.7;"><strong style="color:var(--cream);">Own It</strong> — one payment, yours forever. Current version + quarterly refreshes. No recurring billing.</div>
+    </div>
+  </div>
+</section>
+
+<script>
+function setBilling(type) {
+  const btns = {monthly:'btn-monthly',annual:'btn-annual',onetime:'btn-onetime'};
+  Object.entries(btns).forEach(([k,id]) => {
+    const el = document.getElementById(id);
+    el.style.background = k===type ? 'var(--lime)' : 'transparent';
+    el.style.color = k===type ? 'var(--dk)' : 'var(--mist)';
+  });
+  const data = {
+    monthly: {pp:'$24',ps:'/mo',pper:'Billed monthly · cancel anytime',cp:'$74',cs:'/mo',cper:'Billed monthly · cancel anytime',note:'Billed monthly — cancel anytime. Full access from day one.',psave:false,csave:false},
+    annual:  {pp:'$199',ps:'/yr',pper:'Billed annually — best value',cp:'$649',cs:'/yr',cper:'Billed annually — best value',note:'Billed annually — save 20% vs monthly. All upgrades included.',psave:true,csave:true},
+    onetime: {pp:'$249',ps:'',pper:'One-time purchase — own it forever',cp:'$799',cs:'',cper:'One-time purchase — own it forever',note:'Single payment. Current program + quarterly drill refreshes. No recurring billing.',psave:false,csave:false},
+  };
+  const d = data[type];
+  document.getElementById('player-price').textContent = d.pp;
+  document.getElementById('player-suffix').textContent = d.ps;
+  document.getElementById('player-per').textContent = d.pper;
+  document.getElementById('player-save').style.display = d.psave ? 'block' : 'none';
+  document.getElementById('coach-price').textContent = d.cp;
+  document.getElementById('coach-suffix').textContent = d.cs;
+  document.getElementById('coach-per').textContent = d.cper;
+  document.getElementById('coach-save').style.display = d.csave ? 'block' : 'none';
+  document.getElementById('billing-note').textContent = d.note;
+}
+</script>
+
+<div class="divider"></div>
+
+<!-- FOUNDATIONS TIER -->
+<section class="sec" id="foundations" style="background:var(--dk2);">
+  <div class="sec-inner">
+    <div style="display:inline-flex;align-items:center;gap:8px;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);margin-bottom:12px;">
+      <div style="width:16px;height:1.5px;background:var(--gold2);"></div>
+      COMING SOON — ELITE RAIDERS FOUNDATIONS
+    </div>
+    <div class="sh2" style="margin-bottom:18px;">THE PIPELINE<br><em style="color:var(--gold2);">STARTS AT 10.</em></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:48px;" class="os-twocol">
+      <div>
+        <p style="font-size:15px;color:var(--cream2);line-height:1.9;margin-bottom:20px;">The Elite Raiders system is built for ages 12–19. <strong style="color:var(--cream);">Foundations</strong> is the next product — purpose-built for ages 10–12 with the same identity, a lighter system, and a direct graduation bridge into the Elite program at age 12.</p>
+        <p style="font-size:13px;color:var(--mist);line-height:1.85;margin-bottom:28px;">Players don't learn a different system at age 10. They learn a simplified version of the same one — so they arrive at 12 already thinking in the Elite Raiders language.</p>
+        <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(240,168,32,.08);border:1px solid rgba(240,168,32,.2);border-radius:5px;padding:12px 20px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--gold2);animation:pulse-gold 2s ease-out infinite;flex-shrink:0;"></div>
+          <div style="font-size:11px;color:var(--gold2);font-weight:700;letter-spacing:.5px;">Launching Month 12 — Join the waitlist for early access</div>
+        </div>
+        <style>@keyframes pulse-gold{0%{box-shadow:0 0 0 0 rgba(240,168,32,.5);}100%{box-shadow:0 0 0 10px rgba(240,168,32,0);}}</style>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--gold2);">
+          <div style="font-size:22px;flex-shrink:0;">⚽</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:3px;">30 Foundations Drills</div><div style="font-size:11px;color:var(--mist);line-height:1.6;">Possession, rondo, small-sided games, basic position work. Max 7v7. All animated. All scripted. Same format as the Elite library.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--lime);">
+          <div style="font-size:22px;flex-shrink:0;">📅</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:3px;">12-Week Calendar</div><div style="font-size:11px;color:var(--mist);line-height:1.6;">Three sessions per week, max 60 minutes each. Phase 1: Fun + Identity. Phase 2: Skill Building. Phase 3: Simple Tactics.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 18px;background:var(--dk3);border-radius:var(--r);border-left:3px solid var(--blue2);">
+          <div style="font-size:22px;flex-shrink:0;">🎓</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--cream);margin-bottom:3px;">Graduation Bridge Module</div><div style="font-size:11px;color:var(--mist);line-height:1.6;">A 4-week module at the end that introduces the 4-3-3, the PRESS! trigger, and the DM role. Players arrive at the Elite program already speaking the language.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THREE-TIER PIPELINE -->
+    <div style="margin-bottom:32px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--mist);margin-bottom:16px;display:flex;align-items:center;gap:10px;"><div style="width:14px;height:1.5px;background:var(--mist);"></div>The Complete Player Pipeline</div>
+      <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.06);border-radius:var(--r);overflow:hidden;">
+        <div style="flex:1;padding:20px 22px;border-right:1px solid rgba(255,255,255,.06);">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;">FOUNDATIONS · Ages 10–12</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--gold2);line-height:1;margin-bottom:8px;">Entry Point</div>
+          <div style="font-size:11px;color:var(--mist);line-height:1.65;">30 drills · 12-week calendar · Identity introduction · Graduation bridge</div>
+          <div style="margin-top:12px;font-size:10px;font-weight:700;color:var(--gold2);display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(240,168,32,.08);border:1px solid rgba(240,168,32,.2);border-radius:3px;">⏳ Coming Month 12</div>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;color:var(--mist);font-size:18px;">→</div>
+        <div style="flex:1;padding:20px 22px;border-right:1px solid rgba(255,255,255,.06);background:rgba(24,196,114,.03);">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);margin-bottom:6px;">ELITE · Ages 12–19</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--lime);line-height:1;margin-bottom:8px;">Full System</div>
+          <div style="font-size:11px;color:var(--mist);line-height:1.65;">96 drills · 24-week calendar · 5 formations · Off-season plan · 6 upgrade tiers</div>
+          <div style="margin-top:12px;font-size:10px;font-weight:700;color:var(--lime);display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(24,196,114,.08);border:1px solid rgba(24,196,114,.2);border-radius:3px;">✓ Available Now</div>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;color:var(--mist);font-size:18px;">→</div>
+        <div style="flex:1;padding:20px 22px;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue2);margin-bottom:6px;">ALUMNI · Ages 19+</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--blue2);line-height:1;margin-bottom:8px;">Advanced Track</div>
+          <div style="font-size:11px;color:var(--mist);line-height:1.65;">College prep · Semi-pro conditioning · Advanced individual programs</div>
+          <div style="margin-top:12px;font-size:10px;font-weight:700;color:var(--mist);display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:3px;">🔭 Future Roadmap</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOUNDATIONS WAITLIST CTA -->
+    <div style="background:rgba(240,168,32,.05);border:1px solid rgba(240,168,32,.15);border-radius:var(--r);padding:28px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--cream);text-transform:uppercase;margin-bottom:6px;">Get Early Access to Foundations</div>
+        <div style="font-size:12px;color:var(--cream2);line-height:1.7;">Beta coaches get free access during the build phase in exchange for feedback. Limited spots.</div>
+      </div>
+      <button onclick="openContactModal('Foundations Early Access','Join the Waitlist')" style="display:inline-flex;align-items:center;gap:10px;background:var(--gold2);color:var(--dk);font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:14px 28px;border-radius:4px;white-space:nowrap;transition:all .2s;border:none;cursor:pointer;font-family:inherit;">Join the Waitlist →</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">ELITE <em>RAIDERS</em><br>SOCCER</div>
+        <div class="footer-copy" style="margin-top:12px;">by Nana Frimpong Sintim-Aboagye<br>EIN Registered · Youth Soccer Development<br>Ages 12–19 · Illinois</div>
+      </div>
+      <div>
+        <div class="footer-h">Contact</div>
+        <button onclick="openContactModal('General Inquiry','Get In Touch')" class="footer-link" style="background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;padding:0;">NFSA@eliteraiderssoccer.com</button>
+        <a href="tel:+13318030897" class="footer-link">(331) 803-0897</a>
+      </div>
+      <div>
+        <div class="footer-h">Program</div>
+        <a href="#drills" class="footer-link">96-Drill Library</a>
+        <a href="#pricing" class="footer-link">Pricing</a>
+        <button onclick="openContactModal('Academy Inquiry','Academy Licensing')" class="footer-link" style="background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;padding:0;">Academy Licensing</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy-line" style="color:var(--mist);">© 2026 Nana Frimpong Sintim-Aboagye · Elite Raiders Soccer. All Rights Reserved. Protected under Berne Convention & U.S. Copyright Law (17 U.S.C.)</div>
+    </div>
+  </div>
+</footer>
+<!-- CONTACT MODAL -->
+<div id="contact-modal" class="cmodal-overlay" role="dialog" aria-modal="true">
+  <div class="cmodal-box">
+    <button class="cmodal-close" onclick="closeContactModal()" aria-label="Close">✕</button>
+    <div id="cmodal-title" class="cmodal-title">Get In Touch</div>
+    <div class="cmodal-sub">We'll get back to you within 24 hours.</div>
+    <form id="cmodal-form" action="https://formspree.io/f/mojrvyjv" method="POST">
+      <input type="hidden" name="_subject" id="cmodal-subject" value="General Inquiry">
+      <div class="cmodal-field">
+        <label class="cmodal-label" for="cmodal-name">Your Name</label>
+        <input class="cmodal-input" type="text" id="cmodal-name" name="name" required>
+      </div>
+      <div class="cmodal-field">
+        <label class="cmodal-label" for="cmodal-email">Email Address</label>
+        <input class="cmodal-input" type="email" id="cmodal-email" name="email" required>
+      </div>
+      <div class="cmodal-field">
+        <label class="cmodal-label" for="cmodal-message">Message (optional)</label>
+        <textarea class="cmodal-input" id="cmodal-message" name="message" rows="3" style="resize:vertical;"></textarea>
+      </div>
+      <button type="submit" id="cmodal-submit" class="cmodal-submit">Send →</button>
+      <div id="cmodal-success" class="cmodal-msg cmodal-success">Message sent! We'll be in touch soon.</div>
+      <div id="cmodal-error" class="cmodal-msg cmodal-error">Something went wrong. Please try again.</div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  var overlay=document.getElementById('contact-modal');
+  var form=document.getElementById('cmodal-form');
+  var submitBtn=document.getElementById('cmodal-submit');
+  var successMsg=document.getElementById('cmodal-success');
+  var errorMsg=document.getElementById('cmodal-error');
+
+  window.openContactModal=function(subject,title){
+    document.getElementById('cmodal-subject').value=subject||'General Inquiry';
+    document.getElementById('cmodal-title').textContent=title||'Get In Touch';
+    form.reset();
+    document.getElementById('cmodal-subject').value=subject||'General Inquiry';
+    successMsg.style.display='none';
+    errorMsg.style.display='none';
+    submitBtn.textContent='Send →';
+    submitBtn.disabled=false;
+    overlay.classList.add('open');
+    document.body.style.overflow='hidden';
+  };
+
+  window.closeContactModal=function(){
+    overlay.classList.remove('open');
+    document.body.style.overflow='';
+  };
+
+  overlay.addEventListener('click',function(e){if(e.target===overlay)closeContactModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeContactModal();});
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    submitBtn.textContent='Sending…';
+    submitBtn.disabled=true;
+    successMsg.style.display='none';
+    errorMsg.style.display='none';
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+      .then(function(r){
+        if(r.ok){successMsg.style.display='block';form.reset();}
+        else{errorMsg.style.display='block';}
+        submitBtn.textContent='Send →';submitBtn.disabled=false;
+      })
+      .catch(function(){
+        errorMsg.style.display='block';
+        submitBtn.textContent='Send →';submitBtn.disabled=false;
+      });
+  });
+})();
+</script>
+</body>
+</html>
