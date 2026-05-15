@@ -105,7 +105,7 @@ def build_dashboard():
 
     metric_spec = {
         "$schema": "https://vega.github.io/schema/vega/v5.json",
-        "width": 200, "height": 120, "padding": 5, "autosize": "none",
+        "padding": 5,
         "data": [{
             "name": "online",
             "url": {
@@ -148,7 +148,7 @@ def build_dashboard():
 
     pie_spec = {
         "$schema": "https://vega.github.io/schema/vega/v5.json",
-        "width": 340, "height": 220, "padding": 5, "autosize": "none",
+        "padding": 5,
         "data": [
             {
                 "name": "raw",
@@ -204,7 +204,7 @@ def build_dashboard():
 
     table_spec = {
         "$schema": "https://vega.github.io/schema/vega/v5.json",
-        "width": 600, "padding": 5, "autosize": "none",
+        "padding": 5,
         "data": [{
             "name": "agents",
             "url": {
