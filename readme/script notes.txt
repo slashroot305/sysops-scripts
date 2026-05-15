@@ -1,9 +1,0 @@
-Python
-
-List processes on Mac
- - sudo launchctl list
- - sudo launchctl list | grep service
-
-Create a txt file or any file extention
-file = open ('example.txt, 'a')
-file.close()
