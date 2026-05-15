@@ -10,6 +10,9 @@ on:
         required: false
         default: 'no'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
