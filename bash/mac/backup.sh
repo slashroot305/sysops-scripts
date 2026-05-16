@@ -1,11 +1,7 @@
 #!/bin/bash
 
 #===========================================================#
-#
 # Description: Backs up folder from one location to another.
-#
-# Version: 1.0
-#
 #===========================================================#
 
 # define source and destination locations
