@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 # ── CONFIG (all from environment / GitHub Secrets) ────────────
 KIBANA_URL = os.environ.get("KIBANA_URL", "https://my-security-project-aac892.kb.us-east-2.aws.elastic.cloud")
 ES_URL     = os.environ.get("ES_URL",     "https://my-security-project-aac892.es.us-east-2.aws.elastic.cloud")
-API_KEY    = os.environ["ELASTIC_API_KEY"]
+API_KEY    = os.environ["ELASTIC_CLOUD_API_KEY_CLI"]
 HEADERS    = {"Authorization": f"ApiKey {API_KEY}", "kbn-xsrf": "true"}
 
 INDEX   = "fleet-agents-health"

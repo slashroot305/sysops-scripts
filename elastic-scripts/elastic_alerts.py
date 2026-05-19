@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 
 es = Elasticsearch(
     "https://my-security-project-aac892.es.us-east-2.aws.elastic.cloud",
-    api_key=os.environ["ELASTIC_API_KEY"]
+    api_key=os.environ["ELASTIC_CLOUD_API_KEY_CLI"]
 )
 
 print(es.info())
