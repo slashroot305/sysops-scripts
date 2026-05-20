@@ -2,7 +2,7 @@
 """
 Agent Health Dashboard
 Syncs Fleet agent status to Elasticsearch and creates a Kibana dashboard.
-Designed to run externally via GitHub Actions on a 15-minute schedule.
+Designed to run externally via GitHub Actions on a 10-minute schedule.
 
 Usage:
   python create_agent_health_dashboard.py               # sync + dashboard

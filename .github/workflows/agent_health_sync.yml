@@ -2,7 +2,7 @@ name: Sync Agent Health Dashboard
 
 on:
   schedule:
-    - cron: '*/5 * * * *'    # every 5 minutes
+    - cron: '*/10 * * * *'   # every 10 minutes
   workflow_dispatch:           # manual trigger from GitHub UI
     inputs:
       rebuild_dashboard:
