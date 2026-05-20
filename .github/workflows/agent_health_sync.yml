@@ -31,7 +31,7 @@ jobs:
 
       - name: Sync agents
         env:
-          ELASTIC_API_KEY: ${{ secrets.ELASTIC_API_KEY }}
+          ELASTIC_CLOUD_API_KEY_CLI: ${{ secrets.ELASTIC_API_KEY }}
           KIBANA_URL: ${{ secrets.KIBANA_URL }}
           ES_URL: ${{ secrets.ES_URL }}
         run: python elastic-scripts/create_agent_health_dashboard.py --sync-only
@@ -39,7 +39,7 @@ jobs:
       - name: Rebuild dashboard (manual trigger only)
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.rebuild_dashboard == 'yes'
         env:
-          ELASTIC_API_KEY: ${{ secrets.ELASTIC_API_KEY }}
+          ELASTIC_CLOUD_API_KEY_CLI: ${{ secrets.ELASTIC_API_KEY }}
           KIBANA_URL: ${{ secrets.KIBANA_URL }}
           ES_URL: ${{ secrets.ES_URL }}
         run: python elastic-scripts/create_agent_health_dashboard.py --dashboard-only
