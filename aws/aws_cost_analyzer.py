@@ -268,13 +268,31 @@ class AWSCostAnalyzer:
         section("PHASE 3: IDLE RESOURCE DETECTION")
 
         if self.is_management and self.is_org and len(self.org_accounts) > 1:
-            info(
-                "Multi-account org detected. For full org resource scan, this tool needs "
-                "cross-account IAM roles (OrganizationAccountAccessRole) or run per-account."
-            )
-            info("Scanning management account resources now.")
-
-        self._scan_account(self.session, self.account_id)
+            sts = self.session.client("sts")
+            for account in self.org_accounts:
+                acct_id   = account["Id"]
+                acct_name = account["Name"]
+                if acct_id == self.account_id:
+                    info(f"Scanning {acct_name} ({acct_id}) — management account")
+                    self._scan_account(self.session, acct_id)
+                else:
+                    role_arn = f"arn:aws:iam::{acct_id}:role/OrganizationAccountAccessRole"
+                    try:
+                        creds = sts.assume_role(
+                            RoleArn=role_arn,
+                            RoleSessionName="CostAnalyzerScan",
+                        )["Credentials"]
+                        member_session = boto3.Session(
+                            aws_access_key_id=creds["AccessKeyId"],
+                            aws_secret_access_key=creds["SecretAccessKey"],
+                            aws_session_token=creds["SessionToken"],
+                        )
+                        info(f"Scanning {acct_name} ({acct_id})")
+                        self._scan_account(member_session, acct_id)
+                    except ClientError as e:
+                        warn(f"Could not assume role in {acct_name} ({acct_id}): {e.response['Error']['Code']}")
+        else:
+            self._scan_account(self.session, self.account_id)
 
     def _scan_account(self, session, account_id):
         info(f"Scanning account {account_id} across {len(COMMON_REGIONS)} regions...")
