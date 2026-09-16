@@ -2,7 +2,7 @@ import os
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch(
-    "https://my-security-project-aac892.es.us-east-2.aws.elastic.cloud",
+    os.environ["ES_URL"],
     api_key=os.environ["ELASTIC_CLOUD_API_KEY_CLI"]
 )
 

@@ -14,8 +14,8 @@ import os, json, uuid, sys, io
 import requests
 from datetime import datetime, timezone
 
-KIBANA_URL = os.environ.get("KIBANA_URL", "https://my-security-project-aac892.kb.us-east-2.aws.elastic.cloud")
-ES_URL     = os.environ.get("ES_URL",     "https://my-security-project-aac892.es.us-east-2.aws.elastic.cloud")
+KIBANA_URL = os.environ.get("KIBANA_URL", "https://your-elastic-deployment.kb.us-east-2.aws.elastic.cloud")
+ES_URL     = os.environ.get("ES_URL",     "https://your-elastic-deployment.es.us-east-2.aws.elastic.cloud")
 API_KEY    = os.environ["ELASTIC_CLOUD_API_KEY_CLI"]
 HEADERS    = {"Authorization": f"ApiKey {API_KEY}", "kbn-xsrf": "true", "Content-Type": "application/json"}
 

@@ -300,7 +300,7 @@ aws secretsmanager create-secret \
 aws secretsmanager create-secret \
   --name "elastic/agent-health/kibana-url" \
   --description "Kibana endpoint URL" \
-  --secret-string "https://my-security-project-aac892.kb.us-east-2.aws.elastic.cloud" \
+  --secret-string "https://your-elastic-deployment.kb.us-east-2.aws.elastic.cloud" \
   --region us-east-2 \
   --profile siem-logs
 
@@ -308,7 +308,7 @@ aws secretsmanager create-secret \
 aws secretsmanager create-secret \
   --name "elastic/agent-health/es-url" \
   --description "Elasticsearch endpoint URL" \
-  --secret-string "https://my-security-project-aac892.es.us-east-2.aws.elastic.cloud" \
+  --secret-string "https://your-elastic-deployment.es.us-east-2.aws.elastic.cloud" \
   --region us-east-2 \
   --profile siem-logs
 ```
@@ -559,7 +559,7 @@ from datetime import datetime, timezone
 from dateutil import parser
 
 es = Elasticsearch(
-    'https://my-security-project-aac892.es.us-east-2.aws.elastic.cloud',
+    os.environ['ES_URL'],
     api_key=os.environ['ELASTIC_CLOUD_API_KEY_CLI']
 )
 r = es.search(index='fleet-agents-health', size=1, body={

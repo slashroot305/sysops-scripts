@@ -1,4 +1,6 @@
 import subprocess
+import argparse
+
 
 def create_aws_user(username):
     try:
@@ -14,5 +16,9 @@ def create_aws_user(username):
         print("Error creating user:")
         print(e.stderr)
 
+
 if __name__ == "__main__":
-    create_aws_user("test2")
+    parser = argparse.ArgumentParser(description="Create an IAM user in AWS")
+    parser.add_argument("username", help="IAM username to create")
+    args = parser.parse_args()
+    create_aws_user(args.username)

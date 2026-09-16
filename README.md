@@ -1,282 +1,251 @@
-# System Administration & Utility Scripts
+# sysops-scripts
 
-A collection of system administration, automation, and utility scripts for Linux, macOS, and Windows environments.
+A collection of SysOps, security engineering, and automation scripts for AWS, Elastic Security, and cross-platform system administration.
 
-## 📋 Table of Contents
+---
 
-- [Scripts Overview](#scripts-overview)
-- [Requirements](#requirements)
-- [Usage](#usage)
-- [Security Considerations](#security-considerations)
-- [License](#license)
+## Repository Structure
 
------
+```
+sysops-scripts/
+├── elastic-scripts/              # Elastic Security SIEM tooling
+│   ├── rtr/                      # Run-script response action payloads
+│   │   ├── linux-and-mac/        # macOS/Linux endpoint health collector
+│   │   └── windows/              # Windows endpoint health collector
+│   ├── create_agent_health_dashboard.py
+│   ├── create_ai_security_monitor.py
+│   ├── elastic_alerts.py
+│   ├── lambda_handler.py
+│   └── AGENT_HEALTH_SYNC_RUNBOOK.md
+├── crowdstrike-scripts/          # CrowdStrike Falcon sensor installers
+│   ├── falcon-install-ubuntu.sh
+│   ├── falcon-install-macos.sh
+│   └── falcon-install-windows.ps1
+├── aws/                          # AWS automation
+│   ├── aws_cost_analyzer.py
+│   ├── create_user_aws.py
+│   └── delete_user.py
+├── powershell/                   # Windows/PowerShell scripts
+│   └── software_removal_check.ps1
+├── bash/mac/                     # macOS Bash scripts
+│   ├── backup.sh
+│   └── disable_startup_apps.sh
+├── python/                       # Python utilities
+│   └── password_generator.py
+└── yaml/                         # CloudFormation templates
+    └── console-to-code.yaml
+```
+
+---
 
 ## Scripts Overview
 
-### 1. **eBPF Enabler** (`ebpf-enabler.sh`)
+### Elastic Security
 
-**Platform:** Linux (Bash)
-**Purpose:** Enables unprivileged eBPF (extended Berkeley Packet Filter) programs on Linux systems.
-
-**Features:**
-
-- Checks current eBPF status (enabled/hard disabled/soft disabled)
-- Automatically enables eBPF if it’s soft disabled
-- Provides clear status messages about the current state
-
-**Status Values:**
-
-- `0` = eBPF enabled
-- `1` = Hard disabled (reboot required to enable)
-- `2` = Soft disabled (can be enabled without reboot)
+#### `create_agent_health_dashboard.py`
+Syncs Fleet agent status to Elasticsearch and creates a Kibana dashboard with an online agent count, status distribution pie chart, and per-agent details table. Designed to run on a schedule via GitHub Actions or AWS Lambda (see runbook).
 
 **Usage:**
-
 ```bash
-sudo ./ebpf-enabler.sh
+python create_agent_health_dashboard.py               # sync + dashboard
+python create_agent_health_dashboard.py --sync-only   # agent sync only
+python create_agent_health_dashboard.py --dashboard-only
 ```
 
-**Security Warning:** Enabling unprivileged eBPF introduces security risks. Only use in trusted environments.
+**Prerequisites:** `KIBANA_URL`, `ES_URL`, `ELASTIC_CLOUD_API_KEY_CLI` environment variables.
 
------
+---
 
-### 2. **Backup Script** (`backup.sh`)
+#### `create_ai_security_monitor.py`
+Creates Kibana SIEM detection rules and AI activity dashboards that monitor AI service usage (OpenAI, Anthropic, Copilot, etc.) across all Elastic Defend endpoints. Includes detection rules for high-volume usage, after-hours access, and unsanctioned local AI tools.
 
-**Platform:** macOS/Linux (Bash)
-**Purpose:** Creates backup copies of directories from one location to another.
+**Usage:**
+```bash
+python create_ai_security_monitor.py                    # rules + all dashboards
+python create_ai_security_monitor.py --rules-only
+python create_ai_security_monitor.py --dashboard-only
+python create_ai_security_monitor.py --detections-dashboard
+```
 
-**Features:**
+---
 
-- Validates source and destination paths before backup
-- Creates complete directory copies using `rsync`
-- Provides feedback on backup success/failure
+#### `elastic_alerts.py`
+Quick connectivity test and alert query against Elastic Security. Useful for verifying API key access and running ad-hoc alert lookups.
+
+---
+
+#### `lambda_handler.py`
+AWS Lambda handler that retrieves Elastic credentials from AWS Secrets Manager and invokes the agent health sync. Designed for serverless scheduled execution.
+
+---
+
+#### `AGENT_HEALTH_SYNC_RUNBOOK.md`
+Full architecture and step-by-step runbook for migrating the agent health sync from GitHub Actions to a serverless AWS pipeline (EventBridge Scheduler → Lambda → Secrets Manager). Includes cost analysis, IAM least-privilege policy, CloudWatch alerting, and rollback plan.
+
+---
+
+#### `rtr/linux-and-mac/endpoint_health_collector.py`
+Run-script response action payload for macOS and Linux endpoints. Collects system info, logged-in users, recent logins, top processes, network connections, persistence mechanisms, security posture (SIP, Gatekeeper, FileVault), recently modified files, and disk usage. Outputs structured JSON for ingestion into Kibana.
+
+---
+
+#### `rtr/windows/endpoint_health_collector.ps1`
+Windows equivalent of the endpoint health collector. Collects system info, user sessions, recent logins (Event ID 4624), top processes, network connections, persistence mechanisms (registry run keys, scheduled tasks, startup folder), Windows Defender status, BitLocker, firewall state, local admins, and disk usage.
+
+---
+
+### AWS
+
+#### `aws_cost_analyzer.py`
+Multi-account AWS cost analysis tool. Pulls cost and usage data across all linked accounts in an AWS Organization using Cost Explorer, breaks down spend by service, and identifies top cost drivers. Supports profile-based auth for cross-account access.
+
+---
+
+#### `create_user_aws.py`
+Creates an IAM user via the AWS CLI.
+
+**Usage:**
+```bash
+python create_user_aws.py <username>
+```
+
+---
+
+#### `delete_user.py`
+Interactively deletes an IAM user. Prompts for confirmation before deletion.
+
+---
+
+### PowerShell
+
+#### `software_removal_check.ps1`
+Validates software installation/removal across multiple detection methods (Windows services, installation folders, registry keys) and sends results to a Logscale/Humio endpoint. Includes a reusable `SendTo-Logscale` function. Uses Symantec Endpoint Protection as an example — customizable for any software.
 
 **Configuration:**
-Edit the script to set your paths:
+1. Set the Logscale URL in `SendTo-Logscale`
+2. Add your Logscale authentication token
+3. Update the service name, folder path, and registry key for your target software
 
-```bash
-source_path="/path/to/source"
-destination_path="/path/to/destination"
-main_copy_path="/path/to/main copy"
-backup_copy_path="/path/to/backup copy"
-```
+---
 
-**Usage:**
+### Bash
 
-```bash
-./backup.sh
-```
+#### `backup.sh`
+Backs up a directory from one location to another using `rsync`. Validates source and destination paths before running and provides progress feedback.
 
------
+**Configuration:** Edit the path variables at the top of the script.
 
-### 3. **Disable Startup Apps** (`disable-startup-apps.sh`)
+---
 
-**Platform:** macOS (Bash)
-**Purpose:** Removes specified applications from macOS login items (startup apps).
+#### `disable_startup_apps.sh`
+Removes specified applications from macOS login items using AppleScript via `osascript`.
 
-**Features:**
+**Configuration:** Edit the `APPS` array to specify which apps to disable.
 
-- Disables multiple apps from launching at startup
-- Uses AppleScript via `osascript` for system integration
+---
 
-**Configuration:**
-Edit the `APPS` array to specify which applications to disable:
+### Python
 
-```bash
-APPS=("Splice" "Spotify" "YourAppName")
-```
+#### `password_generator.py`
+Generates a cryptographically secure 16-character random string using Python's `secrets` module.
 
 **Usage:**
-
 ```bash
-./disable-startup-apps.sh
+python3 password_generator.py
 ```
 
------
+---
 
-### 4. **Software Validation Script** (`software-validation.ps1`)
+### CrowdStrike
 
-**Platform:** Windows (PowerShell)  
-**Purpose:** Validates software installation/removal and sends telemetry data to Logscale/Humio.
-
-**Features:**
-
-- Checks for software presence via multiple methods:
-  - Windows Services
-  - Installation folders
-  - Registry keys
-- Sends validation results to CrowdStrike NGSiem (Formerly Logscale) for monitoring
-- Includes logging functionality
-- Example implementation for Symantec Endpoint Protection (SEP)
-
-**Configuration:**
-
-1. Update the Logscale URL in the `SendTo-Logscale` function
-1. Add your Logscale authentication token
-1. Customize the software paths and registry keys to check
+#### `crowdstrike-scripts/falcon-install-ubuntu.sh`
+Installs the CrowdStrike Falcon sensor on Ubuntu (16/18/20/22/24, x86_64 and arm64). Authenticates with the CrowdStrike API, downloads the N-1 sensor package, validates SHA256 integrity, installs via `dpkg`, retrieves the CCID from the API, registers the sensor, and runs a post-install health check.
 
 **Usage:**
+```bash
+export CS_CLIENT_ID=your_client_id
+export CS_CLIENT_SECRET=your_client_secret
+sudo bash falcon-install-ubuntu.sh
+```
 
+---
+
+#### `crowdstrike-scripts/falcon-install-macos.sh`
+Installs the Falcon sensor on macOS (universal — arm64 and x86_64). Same API-driven flow as the Ubuntu script: authenticates, downloads N-1 installer, validates integrity, installs the `.pkg`, registers with CCID, and checks System Extension/Full Disk Access approval status.
+
+**Usage:**
+```bash
+export CS_CLIENT_ID=your_client_id
+export CS_CLIENT_SECRET=your_client_secret
+export CS_BASE_URL=https://api.us-2.crowdstrike.com
+sudo bash falcon-install-macos.sh
+```
+
+---
+
+#### `crowdstrike-scripts/falcon-install-windows.ps1`
+Installs the Falcon sensor on Windows. Authenticates with the CrowdStrike API, downloads the N-1 installer, validates SHA256 integrity, installs silently with the CCID, and polls the `CSFalconService` for a post-install health check.
+
+**Usage (PowerShell as Administrator):**
 ```powershell
-.\software-validation.ps1
+$env:CS_CLIENT_ID     = "your_client_id"
+$env:CS_CLIENT_SECRET = "your_client_secret"
+$env:CS_BASE_URL      = "https://api.us-2.crowdstrike.com"
+.\falcon-install-windows.ps1
 ```
 
-**Example Output:**
+**Prerequisites:** PowerShell 3.0+, run as Administrator.
 
-```
-SEP Service       : Present
-SEP Folder        : Not Present
-SEP Registry Key  : Present
-ComputerName      : HOSTNAME
-DataType          : SEP Check
-```
+---
 
------
+### YAML / CloudFormation
 
-### 5. **Car Matching Game** (`car-game.py`)
+#### `console-to-code.yaml`
+Example CloudFormation template generated from the AWS Console. Creates a security group with SSH access and launches an EC2 instance. Replace the placeholder VPC ID and AMI ID with your own values before deploying.
 
-**Platform:** Cross-platform (Python)  
-**Purpose:** Interactive command-line game to match car makes with their models.
-
-**Features:**
-
-- Match car manufacturers with correct models
-- Win by finding 3 correct matches
-- Input validation and error handling
-- Manual exit option (enter `9`)
-
-**Usage:**
-
-```bash
-python3 car-game.py
-```
-
------
-
-### 6. **Secure Password Generator** (`password-generator.py`)
-
-**Platform:** Cross-platform (Python)  
-**Purpose:** Generates cryptographically secure random 16-character tokens.
-
-**Features:**
-
-- Uses Python’s `secrets` module for cryptographic randomness
-- Generates alphanumeric passwords (letters + digits)
-- 16 characters in length
-- Commented-out code for saving to temporary files (optional feature)
-
-**Usage:**
-
-```bash
-python3 password-generator.py
-```
-
-**Output:**
-
-```
-aB3dE9fG2hI7jK1m
-```
-
------
+---
 
 ## Requirements
 
+### Elastic Scripts
+- Python 3.8+
+- `elasticsearch`, `requests` (`pip install -r requirements.txt`)
+- `KIBANA_URL`, `ES_URL`, `ELASTIC_CLOUD_API_KEY_CLI` environment variables
+
+### AWS Scripts
+- Python 3.6+
+- AWS CLI configured (`aws configure`)
+- `boto3` for cost analyzer
+
+### CrowdStrike Scripts
+- Bash 4.0+ (Ubuntu/macOS)
+- `curl`, `jq` (auto-installed if missing on macOS via Homebrew or direct download)
+- `CS_CLIENT_ID`, `CS_CLIENT_SECRET` env vars required for all three scripts
+- `CS_BASE_URL` env var required for macOS and Windows scripts
+- Run as root/Administrator
+- Generate API credentials at https://falcon.crowdstrike.com/api-clients-and-keys
+
+### PowerShell Scripts
+- PowerShell 5.1+
+- Network access to Logscale/Humio endpoint
+- Administrator rights for registry/service checks
+
 ### Bash Scripts
+- Bash 3.2+
+- macOS: `osascript` available (pre-installed)
+- `rsync` for backup script
 
-- **Linux/macOS:** Bash shell (usually pre-installed)
-- **Permissions:** Some scripts require `sudo` privileges
-
-### PowerShell Script
-
-- **Windows:** PowerShell 5.1 or later
-- **Network:** Access to Logscale/Humio endpoint
-- **Permissions:** Administrator rights for some checks
-
-### Python Scripts
-
-- **Python:** Version 3.6 or later
-- **Modules:** All use standard library modules (no external dependencies)
-
------
-
-## Usage
-
-1. **Clone the repository:**
-
-```bash
-git clone https://github.com/slashroot305/programs_and_scripts.git
-cd programs_and_scripts
-```
-
-1. **Make scripts executable (Linux/macOS):**
-
-```bash
-chmod +x *.sh
-```
-
-1. **Run the desired script:**
-
-```bash
-# Bash scripts
-./ebpf-enabler.sh
-./backup.sh
-./disable-startup-apps.sh
-
-# PowerShell script
-.\software-validation.ps1
-
-# Python scripts
-python3 car-game.py
-python3 password-generator.py
-```
-
------
+---
 
 ## Security Considerations
 
-### Important Security Notes
+- Never commit credentials or tokens to version control — use environment variables or a secrets manager
+- The `software_removal_check.ps1` Logscale token is a placeholder; supply your own via a secure mechanism
+- The CloudFormation template opens SSH (port 22) to `0.0.0.0/0` by default — restrict `CidrIp` before deploying to production
+- Generated passwords should be stored in a password manager, not transmitted over insecure channels
 
-1. **eBPF Enabler:** Enabling unprivileged eBPF can expose your system to local privilege escalation vulnerabilities. Only use in controlled, trusted environments.
-1. **Software Validation Script:**
-- Keep your Logscale token secure
-- Never commit tokens to version control
-- Use environment variables or secure credential storage
-1. **Backup Script:**
-- Ensure proper permissions on backup destinations
-- Validate backup integrity after creation
-- Consider encryption for sensitive data
-1. **Password Generator:**
-- Store generated passwords securely (password manager recommended)
-- Do not transmit passwords over insecure channels
+---
 
------
+## License
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
------
-
-
-## Author
-
-** slashroot305 **
-
------
-
-## Version History
-
-- **v1.0** - Initial release
-  - eBPF enabler script
-  - Backup automation
-  - macOS startup app manager
-  - Software validation with Logscale integration
-  - Car matching game
-  - Secure password generator
-
------
-
-## Support
-
-For issues, questions, or contributions, please open an issue in the GitHub repository.
+MIT — see [LICENSE](LICENSE)
