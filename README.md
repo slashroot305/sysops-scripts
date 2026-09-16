@@ -14,8 +14,9 @@ sysops-scripts/
 │   │   └── windows/              # Windows endpoint health collector
 │   ├── create_agent_health_dashboard.py
 │   ├── create_ai_security_monitor.py
-│   ├── elastic_alerts.py
 │   ├── lambda_handler.py
+│   ├── Dockerfile
+│   ├── requirements.txt
 │   └── AGENT_HEALTH_SYNC_RUNBOOK.md
 ├── crowdstrike-scripts/          # CrowdStrike Falcon sensor installers
 │   ├── falcon-install-ubuntu.sh
@@ -28,12 +29,9 @@ sysops-scripts/
 ├── powershell/                   # Windows/PowerShell scripts
 │   └── software_removal_check.ps1
 ├── bash/mac/                     # macOS Bash scripts
-│   ├── backup.sh
-│   └── disable_startup_apps.sh
-├── python/                       # Python utilities
-│   └── password_generator.py
-└── yaml/                         # CloudFormation templates
-    └── console-to-code.yaml
+│   └── backup.sh
+└── python/                       # Python utilities
+    └── password_generator.py
 ```
 
 ---
@@ -69,13 +67,18 @@ python create_ai_security_monitor.py --detections-dashboard
 
 ---
 
-#### `elastic_alerts.py`
-Quick connectivity test and alert query against Elastic Security. Useful for verifying API key access and running ad-hoc alert lookups.
+#### `lambda_handler.py`
+AWS Lambda handler that retrieves Elastic credentials from AWS Secrets Manager and invokes the agent health sync. Designed for serverless scheduled execution.
 
 ---
 
-#### `lambda_handler.py`
-AWS Lambda handler that retrieves Elastic credentials from AWS Secrets Manager and invokes the agent health sync. Designed for serverless scheduled execution.
+#### `Dockerfile`
+Lambda container image for the agent health sync. Packages `lambda_handler.py` and `create_agent_health_dashboard.py` into an AWS Lambda Python 3.11 runtime. Deploy via ECR + Lambda for scheduled serverless execution.
+
+---
+
+#### `requirements.txt`
+Python dependencies for elastic-scripts: `elasticsearch==9.4.0`, `requests>=2.31.0`.
 
 ---
 
@@ -137,13 +140,6 @@ Backs up a directory from one location to another using `rsync`. Validates sourc
 
 ---
 
-#### `disable_startup_apps.sh`
-Removes specified applications from macOS login items using AppleScript via `osascript`.
-
-**Configuration:** Edit the `APPS` array to specify which apps to disable.
-
----
-
 ### Python
 
 #### `password_generator.py`
@@ -194,14 +190,7 @@ $env:CS_BASE_URL      = "https://api.us-2.crowdstrike.com"
 .\falcon-install-windows.ps1
 ```
 
-**Prerequisites:** PowerShell 3.0+, run as Administrator.
-
----
-
-### YAML / CloudFormation
-
-#### `console-to-code.yaml`
-Example CloudFormation template generated from the AWS Console. Creates a security group with SSH access and launches an EC2 instance. Replace the placeholder VPC ID and AMI ID with your own values before deploying.
+**Prerequisites:** PowerShell 7+, run as Administrator.
 
 ---
 
@@ -226,7 +215,7 @@ Example CloudFormation template generated from the AWS Console. Creates a securi
 - Generate API credentials at https://falcon.crowdstrike.com/api-clients-and-keys
 
 ### PowerShell Scripts
-- PowerShell 5.1+
+- PowerShell 7+
 - Network access to Logscale/Humio endpoint
 - Administrator rights for registry/service checks
 
@@ -241,7 +230,6 @@ Example CloudFormation template generated from the AWS Console. Creates a securi
 
 - Never commit credentials or tokens to version control — use environment variables or a secrets manager
 - The `software_removal_check.ps1` Logscale token is a placeholder; supply your own via a secure mechanism
-- The CloudFormation template opens SSH (port 22) to `0.0.0.0/0` by default — restrict `CidrIp` before deploying to production
 - Generated passwords should be stored in a password manager, not transmitted over insecure channels
 
 ---
